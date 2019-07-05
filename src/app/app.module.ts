@@ -3,14 +3,24 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NavigationComponent } from './shared/components/navigation/navigation.component';
+import { MaterialModule } from './shared/modules/material/material.module';
+import { MatCardModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MaterialModule,
+    MatCardModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
