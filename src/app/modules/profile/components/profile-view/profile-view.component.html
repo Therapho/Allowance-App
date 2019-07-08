@@ -4,8 +4,15 @@
     <mat-card-subtitle>Parent</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div fxLayout='row' fxLayout.sm='column' fxLayoutGap='10px' fxLayoutGap.sm='0px'>
-      <div [gdArea]='label'>Balance</div>
+    <div fxLayout='row' fxLayout.sm='column' >
+      <div gdAreas='label value | label value'
+      gdGap='16px'
+      gdRows='auto auto'>
+      <div gdArea='label'>Balance</div>
+      <div gdArea='value'>$0.00</div>
+      <div gdArea='label'>Days Missed</div>
+      <div gdArea='value'>0</div>
     </div>
+  </div>
   </mat-card-content>
 </mat-card>
