@@ -6,10 +6,10 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { MaterialModule } from '../../shared/modules/material/material.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CardDirective } from './directives/card.directive';
+import { TaskCardComponent } from './components/task-card/task-card.component';
 
 @NgModule({
-  declarations: [TaskListComponent, CardDirective],
+  declarations: [TaskListComponent, TaskCardComponent],
   imports: [
     CommonModule,
     TasksRoutingModule,
