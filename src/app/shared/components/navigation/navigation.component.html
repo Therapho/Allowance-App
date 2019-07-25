@@ -8,6 +8,9 @@
       <a mat-list-item [routerLink]="['/profile']" routerLinkActive="router-link-active"><mat-icon>perm_identity</mat-icon> Profile</a>
       <a mat-list-item [routerLink]="['/tasks']" routerLinkActive="router-link-active" ><mat-icon>done</mat-icon> Tasks</a>
       <a mat-list-item [routerLink]="['/money']" routerLinkActive="router-link-active" ><mat-icon>attach_money</mat-icon> Money</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item *ngIf="!loggedIn"   (click)="onLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+      <a mat-list-item *ngIf="loggedIn" (click)="onLogout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
