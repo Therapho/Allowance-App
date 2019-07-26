@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './money-view.component.html',
   styleUrls: ['./money-view.component.scss']
 })
-export class MoneyViewComponent implements OnInit {
+export class MoneyViewComponent  {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

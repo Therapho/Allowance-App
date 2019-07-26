@@ -5,12 +5,13 @@ import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { BroadcastService, MsalService } from '@azure/msal-angular';
 
+
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit, OnDestroy{
+export class NavigationComponent implements OnInit, OnDestroy {
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -35,6 +36,8 @@ export class NavigationComponent implements OnInit, OnDestroy{
   public userInfo: any = null;
 
   private subscription: Subscription;
+  private storeSubscription: Subscription;
+  public data: string;
 
   onLogin() {
     this.authService.loginPopup();
