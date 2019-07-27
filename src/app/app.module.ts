@@ -1,27 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './shared/components/navigation/navigation.component';
-import { MaterialModule } from './shared/modules/material/material.module';
-import { MatCardModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
+import { LayoutModule } from './layout/layout.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserStore } from './core/services/user-store/user-store';
 
 @NgModule({
-  declarations: [AppComponent, NavigationComponent],
+  declarations: [AppComponent],
   imports: [
+    CoreModule,
+    SharedModule,
     BrowserModule,
-    AppRoutingModule,
-    MaterialModule,
-    MatCardModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
-    FormsModule,
+    LayoutModule,
+    AppRoutingModule,
     [
       MsalModule.forRoot({
         clientID: '88bd734d-2378-4e04-a900-1bf83b88a43f',
@@ -33,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     ]
   ],
   providers: [
+    UserStore,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,

@@ -1,22 +1,24 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule, OnInit, OnDestroy } from '@angular/core';
+import { Routes, RouterModule, Router, NavigationEnd, NavigationStart, RouterEvent } from '@angular/router';
 import { MsalGuard } from '@azure/msal-angular';
+import { NavigationService } from './core/services/navigation-service/navigation.service';
+import { Profile } from 'selenium-webdriver/firefox';
 
 const routes: Routes = [
   {
     path: 'profile',
-    loadChildren: () => import('./modules/profile/profile.module').then(mod => mod.ProfileModule),
+    loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
     canActivate : [MsalGuard]
 
   },
   {
     path: 'tasks',
-    loadChildren: () => import('./modules/tasks/tasks.module').then(mod => mod.TasksModule),
+    loadChildren: () => import('./features/tasks/tasks.module').then(mod => mod.TasksModule),
     canActivate : [MsalGuard]
   },
   {
     path: 'money',
-    loadChildren: () => import('./modules/money/money.module').then(mod => mod.MoneyModule),
+    loadChildren: () => import('./features/money/money.module').then(mod => mod.MoneyModule),
     canActivate : [MsalGuard]
   }
 
@@ -26,4 +28,24 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+  constructor(router: Router, private navigationService: NavigationService) {
+
+    navigationService.left.addNav({module: 'app', nav: [
+      { text: 'Profile', path: '/profile', icon: 'perm_identity'},
+      { text: 'Tasks', path: '/tasks', icon: 'done'},
+      { text: 'Money', path: '/money', icon: 'attach_money'}
+    ]});
+    navigationService.left.setNav('app');
+
+    router.events
+    .filter((event) => event instanceof NavigationEnd)
+    .subscribe(event => {
+      navigationEnded(navigationService, (event as NavigationEnd).url); });
+  }
+}
+function navigationEnded(navigationService: NavigationService, url: string) {
+  const module = url.split('/')[1];
+  navigationService.top.setNav(module);
+}
+

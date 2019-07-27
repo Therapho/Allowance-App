@@ -2,7 +2,7 @@ import {Observable, BehaviorSubject} from 'rxjs';
 
 export class Store<T> {
     state$: Observable<T>;
-    // tslint:disable-next-line: variable-name
+
     private _state$: BehaviorSubject<T>;
 
     protected constructor(initialState: T) {

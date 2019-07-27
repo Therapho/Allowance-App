@@ -4,6 +4,8 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { BroadcastService, MsalService } from '@azure/msal-angular';
+import { NavigationService } from 'src/app/core/services/navigation-service/navigation.service';
+import { UserStore } from 'src/app/core/services/user-store/user-store';
 
 
 @Component({
@@ -17,14 +19,21 @@ export class NavigationComponent implements OnInit, OnDestroy {
     .pipe(
       map(result => result.matches)
     );
+  userStoreSub: Subscription;
 
   public constructor(
     private titleService: Title,
+    public navigationService: NavigationService,
     private breakpointObserver: BreakpointObserver,
     private broadcastService: BroadcastService,
+    public userStore: UserStore,
     private authService: MsalService) {
     titleService.setTitle(this.title);
-    if (this.authService.getUser()) {
+
+    const user = this.authService.getUser();
+    this.userStore.setState(user);
+
+    if (user) {
       this.loggedIn = true;
     } else {
       this.loggedIn = false;
@@ -33,10 +42,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
   title = 'Allowance';
   loggedIn: boolean;
 
-  public userInfo: any = null;
+  public userName: string;
 
   private subscription: Subscription;
-  private storeSubscription: Subscription;
   public data: string;
 
   onLogin() {
@@ -48,6 +56,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userStoreSub = this.userStore.state$.subscribe(user => this.userName = user.name);
     this.broadcastService.subscribe('msal:loginFailure', payload => {
       console.log('login failure ' + JSON.stringify(payload));
 
@@ -55,7 +64,10 @@ export class NavigationComponent implements OnInit, OnDestroy {
     });
 
     this.broadcastService.subscribe('msal:loginSuccess', payload => {
+
       const user = this.authService.getUser();
+      this.userStore.setState(user);
+
       console.log('login success ' + JSON.stringify(payload));
 
       this.loggedIn = true;
@@ -67,6 +79,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+    if (this.userStoreSub) {
+      this.userStoreSub.unsubscribe();
     }
   }
 }
