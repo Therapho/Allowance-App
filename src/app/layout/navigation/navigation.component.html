@@ -25,7 +25,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span><mat-icon>child_care</mat-icon> {{ title }}</span>
-      <a mat-button class='right' [routerLink]='["/profile"]'>{{userName}}</a>
+      <a mat-button class='right' [routerLink]='["/profile"]'>{{userStore.state.name}}</a>
     </mat-toolbar>
     <mat-toolbar color="background"  *ngIf="loggedIn && navigationService.top.count | async">
       <mat-nav-list class="horizontal">

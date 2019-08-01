@@ -6,7 +6,9 @@ import { Title } from '@angular/platform-browser';
 import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { NavigationService } from 'src/app/core/services/navigation-service/navigation.service';
 import { UserStore } from 'src/app/core/services/user-store/user-store';
-
+import { AccountStore } from 'src/app/core/services/account-store/account-store';
+import { User } from 'msal';
+import { Account } from '../../core/types/account';
 
 @Component({
   selector: 'app-navigation',
@@ -20,6 +22,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
       map(result => result.matches)
     );
   userStoreSub: Subscription;
+  accountStoreSub: Subscription;
+  account: Account;
 
   public constructor(
     private titleService: Title,
@@ -27,6 +31,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private broadcastService: BroadcastService,
     public userStore: UserStore,
+    public accountStore: AccountStore,
     private authService: MsalService) {
     titleService.setTitle(this.title);
 
@@ -35,6 +40,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     if (user) {
       this.loggedIn = true;
+
     } else {
       this.loggedIn = false;
     }
@@ -57,6 +63,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userStoreSub = this.userStore.state$.subscribe(user => this.userName = user.name);
+    this.accountStoreSub = this.accountStore.state$.subscribe(account => this.account = account);
     this.broadcastService.subscribe('msal:loginFailure', payload => {
       console.log('login failure ' + JSON.stringify(payload));
 
@@ -66,14 +73,21 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.broadcastService.subscribe('msal:loginSuccess', payload => {
 
       const user = this.authService.getUser();
-      this.userStore.setState(user);
+      this.setUser(user);
 
       console.log('login success ' + JSON.stringify(payload));
 
       this.loggedIn = true;
     });
+    if (this.loggedIn) {
+      const user = this.authService.getUser();
+      this.setUser(user);
+    }
   }
-
+  setUser(user: User) {
+    this.userStore.setState(user);
+    this.accountStore.load(user.displayableId);
+  }
   ngOnDestroy() {
     this.broadcastService.getMSALSubject().next(1);
 
@@ -82,6 +96,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
     if (this.userStoreSub) {
       this.userStoreSub.unsubscribe();
+    }
+    if (this.accountStoreSub) {
+      this.accountStoreSub.unsubscribe();
     }
   }
 }

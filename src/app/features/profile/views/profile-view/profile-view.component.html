@@ -7,7 +7,7 @@
     <div fxLayout='row' fxLayout.xs='column'>
       <div fxFlex='0 0 50%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>User</div>
-        <div fxFlex='0 0 50%'>Carlos</div>
+        <div fxFlex='0 0 50%'>{{accountStore.state.name}}</div>
       </div>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Role</div>
@@ -17,7 +17,7 @@
     <div fxLayout='row' fxLayout.xs='column'>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Balance</div>
-        <div fxFlex='0 0 50%'>$0.00</div>
+        <div fxFlex='0 0 50%'>{{accountStore.state.balance}}</div>
       </div>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Days Missed</div>
