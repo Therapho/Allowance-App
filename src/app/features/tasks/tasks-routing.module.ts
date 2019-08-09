@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TaskListComponent } from './components/task-list/task-list.component';
+import { TaskListViewComponent } from './views/task-list-view/task-list-view.component';
+import { DayListViewComponent } from './views/day-list-view/day-list-view.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TaskListComponent
+    component: DayListViewComponent,
+  },
+  {
+    path: 'tasklist',
+    component: TaskListViewComponent
   }
+
 ];
 
 @NgModule({

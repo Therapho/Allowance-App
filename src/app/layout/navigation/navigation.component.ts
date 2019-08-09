@@ -5,10 +5,10 @@ import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { NavigationService } from 'src/app/core/services/navigation-service/navigation.service';
-import { UserStore } from 'src/app/core/services/user-store/user-store';
-import { AccountStore } from 'src/app/core/services/account-store/account-store';
+import { UserStore } from 'src/app/core/stores/user.store';
+import { AccountStore } from 'src/app/core/stores/account.store';
 import { User } from 'msal';
-import { Account } from '../../core/types/account';
+import { Account } from '../../core/entities/account';
 
 @Component({
   selector: 'app-navigation',

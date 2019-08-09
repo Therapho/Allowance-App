@@ -8,9 +8,8 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserStore } from './core/services/user-store/user-store';
-import { AccountStore } from './core/services/account-store/account-store';
-
+import { UserStore } from './core/stores/user.store';
+import { AccountStore } from './core/stores/account.store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,12 +32,12 @@ import { AccountStore } from './core/services/account-store/account-store';
     ]
   ],
   providers: [
-    UserStore, AccountStore,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true
     },
+    UserStore, AccountStore
   ],
   bootstrap: [AppComponent]
 })

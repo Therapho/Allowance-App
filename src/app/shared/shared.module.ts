@@ -6,10 +6,11 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LookupFilterPipe } from '../core/pipes/lookup-filter.pipe';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [ LookupFilterPipe ],
   imports: [
     LayoutModule,
     MatToolbarModule,
@@ -36,7 +37,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FlexLayoutModule,
     FormsModule,
     LayoutModule,
-    MatCheckboxModule
+    MatCheckboxModule, LookupFilterPipe
   ]
 })
 export class SharedModule { }

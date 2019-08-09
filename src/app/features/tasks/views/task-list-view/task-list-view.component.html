@@ -1,0 +1,19 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let group of this.lookupStore.taskGroups">
+    <mat-expansion-panel-header ngclass='card' nglass.xs='cardxs'>
+      <mat-panel-title ngclass='card' nglass.xs='cardxs'>
+        {{group.name}}
+      </mat-panel-title>
+      <!-- <mat-panel-description>
+        Daily tasks
+      </mat-panel-description> -->
+    </mat-expansion-panel-header>
+    <div fxLayout='row wrap' fxLayout.xs="column">
+
+      <mat-card fxFlex='0 0 23%' fxFlex.sm='0 0 46%' ngClass='card' ngClass.xs='cardxs' ngClass.sm='cardxs'
+        *ngFor="let task of this.taskDefinitionStore.state | taskGroupFilter: group">
+        <mat-checkbox>{{task.description}}</mat-checkbox>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+  </mat-accordion>

@@ -1,7 +1,7 @@
-import { Store } from '../../types/store';
+import { Store } from '../types/store';
 import { Injectable } from '@angular/core';
-import { DataService } from '../data-service/data.service';
-import { Account } from '../../types/account';
+import { DataService } from '../services/data-service/data.service';
+import { Account } from '../entities/account';
 @Injectable()
 export class AccountStore extends Store<Account> {
   constructor(private dataService: DataService) {
