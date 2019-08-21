@@ -24,6 +24,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
   userStoreSub: Subscription;
   accountStoreSub: Subscription;
   account: Account;
+  loginFailSub: Subscription;
+  loginSuccessSub: Subscription;
 
   public constructor(
     private titleService: Title,
@@ -62,28 +64,34 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userStoreSub = this.userStore.state$.subscribe(user => this.userName = user.name);
+    this.userStoreSub = this.userStore.state$.subscribe(u => this.userName = u.name);
     this.accountStoreSub = this.accountStore.state$.subscribe(account => this.account = account);
-    this.broadcastService.subscribe('msal:loginFailure', payload => {
-      console.log('login failure ' + JSON.stringify(payload));
+    this.loginFailSub = this.broadcastService.subscribe('msal:loginFailure', this.loginFail());
+    this.loginSuccessSub = this.broadcastService.subscribe('msal:loginSuccess', this.loginSuccess());
 
-      this.loggedIn = false;
-    });
-
-    this.broadcastService.subscribe('msal:loginSuccess', payload => {
-
-      const user = this.authService.getUser();
-      this.setUser(user);
-
-      console.log('login success ' + JSON.stringify(payload));
-
+    const user = this.authService.getUser();
+    if (user) {
       this.loggedIn = true;
-    });
-    if (this.loggedIn) {
-      const user = this.authService.getUser();
       this.setUser(user);
     }
+
   }
+  private loginFail() {
+    return payload => {
+      console.log('login failure ' + JSON.stringify(payload));
+      this.loggedIn = false;
+    };
+  }
+
+  private loginSuccess() {
+    return payload => {
+      const user = this.authService.getUser();
+      this.setUser(user);
+      console.log('login success ' + JSON.stringify(payload));
+      this.loggedIn = true;
+    };
+  }
+
   setUser(user: User) {
     this.userStore.setState(user);
     this.accountStore.load(user.displayableId);
@@ -91,14 +99,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.broadcastService.getMSALSubject().next(1);
 
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+
     if (this.userStoreSub) {
       this.userStoreSub.unsubscribe();
     }
     if (this.accountStoreSub) {
       this.accountStoreSub.unsubscribe();
+    }
+    if (this.loginFailSub) {
+      this.loginFailSub.unsubscribe();
+    }
+    if (this.loginSuccessSub) {
+      this.loginSuccessSub.unsubscribe();
     }
   }
 }

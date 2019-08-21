@@ -15,37 +15,48 @@ import { Lookup } from '../../entities/lookup';
   providedIn: 'root'
 })
 export class DataService {
-
-
-  constructor(private client: HttpClient) { }
+  constructor(private client: HttpClient) {}
 
   public getAccount(email: string): Observable<Account> {
-    return this.client.get<Account>(AppConfig.DATA_API_URL + 'accountset/' + email).pipe(
-      catchError(this.handleError));
-
+    return this.client
+      .get<Account>(
+        AppConfig.DATA_API_URL +
+          'accountset/' +
+          email
+          // + '?code=CatMggsxJAX7p1zhNXJK2w8taRanpEVPXc3J8J1EHdRLmHnuMEVfDA=='
+      )
+      .pipe(catchError(this.handleError));
   }
   public getTaskGroupList(): Observable<Lookup[]> {
-    return this.client.get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/taskgroupset').pipe(
-      catchError(this.handleError));
+    return this.client
+      .get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/taskgroupset')
+      .pipe(catchError(this.handleError));
   }
 
   public getRoleList(): Observable<Lookup[]> {
-    return this.client.get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/roleset').pipe(
-      catchError(this.handleError));
+    return this.client
+      .get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/roleset')
+      .pipe(catchError(this.handleError));
   }
   public getStatusList(): Observable<Lookup[]> {
-    return this.client.get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/statusset').pipe(
-      catchError(this.handleError));
+    return this.client
+      .get<Lookup[]>(AppConfig.DATA_API_URL + 'lookups/statusset')
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(err) {
     let errorMessage: string;
-    if (err.error instanceof ErrorEvent || err.error instanceof ProgressEvent) {
+
+    if (err && err.error && err.error.message) {
       errorMessage = `An error occurred: ${err.error.message}`;
     } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+      if (err && err.message) {
+        errorMessage = `An error occurred: ${err.message}`;
+      } else {
+        errorMessage = 'An error occured.';
+      }
     }
-    console.error(err);
+    console.log(errorMessage);
     return throwError(errorMessage);
   }
 }

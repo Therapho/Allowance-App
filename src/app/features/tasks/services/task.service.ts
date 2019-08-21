@@ -70,12 +70,17 @@ export class TaskService {
 
   private handleError(err) {
     let errorMessage: string;
-    if (err.error instanceof ErrorEvent || err.error instanceof ProgressEvent) {
+
+    if (err && err.error && err.error.message) {
       errorMessage = `An error occurred: ${err.error.message}`;
     } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+      if (err && err.message) {
+        errorMessage = `An error occurred: ${err.message}`;
+      } else {
+        errorMessage = 'An error occured.';
+      }
     }
-    console.error(err);
+    console.log(errorMessage);
     return throwError(errorMessage);
   }
 }

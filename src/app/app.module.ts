@@ -3,7 +3,12 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
-import { HTTP_INTERCEPTORS, HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpHandler,
+  HttpClientModule
+} from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
@@ -27,7 +32,11 @@ import { AccountStore } from './core/stores/account.store';
         authority: 'https://login.microsoftonline.com/common',
         cacheLocation: 'localStorage',
         redirectUri: 'http://localhost:4200',
-        consentScopes: ['user.read']
+        consentScopes: [
+          'user.read',
+          'api://1663b9c6-436f-49e9-84b1-684638c20921/Child.Write',
+          'api://1663b9c6-436f-49e9-84b1-684638c20921/Child.Read'
+        ]
       })
     ]
   ],
@@ -37,7 +46,8 @@ import { AccountStore } from './core/stores/account.store';
       useClass: MsalInterceptor,
       multi: true
     },
-    UserStore, AccountStore
+    UserStore,
+    AccountStore
   ],
   bootstrap: [AppComponent]
 })

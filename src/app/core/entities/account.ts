@@ -1,6 +1,6 @@
 export interface Account {
   id: number;
-  roleid: number;
+  roleId: number;
   username: string;
   name: string;
   balance: number;
