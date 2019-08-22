@@ -15,6 +15,7 @@ import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,14 +29,17 @@ import { AccountStore } from './core/stores/account.store';
     HttpClientModule,
     [
       MsalModule.forRoot({
-        clientID: '88bd734d-2378-4e04-a900-1bf83b88a43f',
-        authority: 'https://login.microsoftonline.com/common',
-        cacheLocation: 'localStorage',
-        redirectUri: 'http://localhost:4200',
-        consentScopes: [
-          'user.read',
-          'api://1663b9c6-436f-49e9-84b1-684638c20921/Child.Write',
-          'api://1663b9c6-436f-49e9-84b1-684638c20921/Child.Read'
+        clientID: environment.clientId,
+        authority: environment.authority, // 'https://login.microsoftonline.com/common',
+        cacheLocation: environment.cacheLocation,
+        redirectUri: environment.appPath,
+        consentScopes: environment.contentScopes,
+        protectedResourceMap: [
+          [
+            'https://allowance-functions.azurewebsites.net/api/',
+            ['api://1663b9c6-436f-49e9-84b1-684638c20921/User.Read']
+          ],
+          ['https://graph.microsoft.com/v1.0/me', ['user.read']]
         ]
       })
     ]

@@ -9,6 +9,7 @@ import { UserStore } from 'src/app/core/stores/user.store';
 import { AccountStore } from 'src/app/core/stores/account.store';
 import { User } from 'msal';
 import { Account } from '../../core/entities/account';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-navigation',
@@ -47,7 +48,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.loggedIn = false;
     }
   }
-  title = 'Allowance';
+  title = environment.appTitle;
   loggedIn: boolean;
 
   public userName: string;
@@ -64,15 +65,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userStoreSub = this.userStore.state$.subscribe(u => this.userName = u.name);
+    this.userStoreSub = this.userStore.state$.subscribe(u => {if (u) {this.userName = u.name; }} );
     this.accountStoreSub = this.accountStore.state$.subscribe(account => this.account = account);
     this.loginFailSub = this.broadcastService.subscribe('msal:loginFailure', this.loginFail());
     this.loginSuccessSub = this.broadcastService.subscribe('msal:loginSuccess', this.loginSuccess());
 
     const user = this.authService.getUser();
     if (user) {
-      this.loggedIn = true;
-      this.setUser(user);
+      this.setupLogin(user);
     }
 
   }
@@ -84,18 +84,28 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   private loginSuccess() {
-    return payload => {
+    return async payload => {
       const user = this.authService.getUser();
-      this.setUser(user);
       console.log('login success ' + JSON.stringify(payload));
-      this.loggedIn = true;
+
+      await this.setupLogin(user);
     };
   }
 
-  setUser(user: User) {
+  private async setupLogin(user: User) {
+
+    this.loggedIn = true;
     this.userStore.setState(user);
     this.accountStore.load(user.displayableId);
+    this.authService.acquireTokenSilent(environment.contentScopes)
+      .then(token => localStorage.setItem('access_token', token))
+      .catch (reason =>
+    this.authService.acquireTokenPopup(environment.contentScopes)
+        .then(
+              token => localStorage.setItem('access_token', token)));
   }
+
+
   ngOnDestroy() {
     this.broadcastService.getMSALSubject().next(1);
 
