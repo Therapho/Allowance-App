@@ -95,8 +95,10 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private async setupLogin(user: User) {
 
     this.loggedIn = true;
+    // tslint:disable-next-line: no-string-literal - Dynamics property
+    const userName = user.idToken['emails'][0];
     this.userStore.setState(user);
-    this.accountStore.load(user.displayableId);
+    this.accountStore.load(userName);
     this.authService.acquireTokenSilent(environment.contentScopes)
       .then(token => localStorage.setItem('access_token', token))
       .catch (reason =>

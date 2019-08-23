@@ -30,17 +30,12 @@ import { environment } from 'src/environments/environment';
     [
       MsalModule.forRoot({
         clientID: environment.clientId,
-        authority: environment.authority, // 'https://login.microsoftonline.com/common',
+        authority: environment.authority,
         cacheLocation: environment.cacheLocation,
         redirectUri: environment.appPath,
         consentScopes: environment.contentScopes,
-        protectedResourceMap: [
-          [
-            'https://allowance-functions.azurewebsites.net/api/',
-            ['api://1663b9c6-436f-49e9-84b1-684638c20921/User.Read']
-          ],
-          ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-        ]
+        validateAuthority: environment.validateAthority,
+        protectedResourceMap: environment.protectedResourceMap as [string, string[]][]
       })
     ]
   ],
