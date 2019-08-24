@@ -10,7 +10,7 @@ export class TaskDefinitionStore extends Store<TaskDefinition[]> {
   }
 
   public load() {
-    this.taskService.getTaskDefinitionList().subscribe(
+    this.taskService.getTaskDefinitionList().then(
       (data: TaskDefinition[]) =>
       this.setState(data));
   }

@@ -8,7 +8,7 @@ export class TaskActivityStore extends Store<TaskActivity[]> {
   }
 
   public load(taskDayId: number) {
-    this.taskService.getTaskActivityByDay(taskDayId).subscribe(
+    this.taskService.getTaskActivityByDay(taskDayId).then(
       (data: TaskActivity[]) =>
       this.setState(data));
   }

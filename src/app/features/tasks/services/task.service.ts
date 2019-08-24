@@ -17,21 +17,21 @@ export class TaskService {
 
   constructor(private client: HttpClient) { }
 
-  putTaskWeek(taskWeek: TaskWeek): Observable<number> {
+  putTaskWeek(taskWeek: TaskWeek): Promise<number> {
     const id = taskWeek.id ? taskWeek.id.toString() : '';
 
     return this.client.put(environment.dataApiUrl + 'taskweekset/' + id, taskWeek).pipe(
       map( returnId => +returnId),
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
-  putTaskDay(taskDay: TaskDay): Observable<number> {
+  putTaskDay(taskDay: TaskDay): Promise<number> {
     const id = taskDay.id ? taskDay.id.toString() : '';
 
     return this.client.put(environment.dataApiUrl + 'taskdayset/' + id, taskDay).pipe(
       map( returnId => +returnId),
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
-  getTaskWeekList(accountId: number, startDate: Date, endDate?: Date): Observable<TaskWeek[]> {
+  getTaskWeekList(accountId: number, startDate: Date, endDate?: Date): Promise<TaskWeek[]> {
     const parameters = new HttpParams().set('accountid', accountId.toString()).set('startdate', startDate.toISOString());
     if (endDate) { parameters.set('enddate', endDate.toISOString()); }
     const options = {params: parameters};
@@ -43,9 +43,9 @@ export class TaskService {
         };
         return taskWeek; })
         ),
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
-  getTaskDayList(accountId: number, taskWeekId: number): Observable<TaskDay[]> {
+  getTaskDayList(accountId: number, taskWeekId: number): Promise<TaskDay[]> {
     const options = {params: new HttpParams().set('accountid', accountId.toString()).set('taskweekid', taskWeekId.toString()) };
     return this.client.get<TaskDay[]>(environment.dataApiUrl + 'taskdayset', options).pipe(
       map((list: TaskDay[]) => list.map(data => {
@@ -55,17 +55,17 @@ export class TaskService {
         };
         return taskDay; })
         ),
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
 
-  public getTaskDefinitionList(): Observable<TaskDefinition[]> {
+  public getTaskDefinitionList(): Promise<TaskDefinition[]> {
     return this.client.get<TaskDefinition[]>(environment.dataApiUrl + 'taskdefinitionset').pipe(
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
-  public getTaskActivityByDay(dayId: number): Observable<TaskActivity[]> {
+  public getTaskActivityByDay(dayId: number): Promise<TaskActivity[]> {
     const options = {params: new HttpParams().set('taskactivityid', dayId.toString()) };
     return this.client.get<TaskActivity[]>(environment.dataApiUrl + 'taskactivityset', options).pipe(
-      catchError(this.handleError));
+      catchError(this.handleError)).toPromise();
   }
 
   private handleError(err) {

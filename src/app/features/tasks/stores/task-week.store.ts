@@ -1,34 +1,49 @@
-
 import { Store } from 'src/app/core/types/store';
 import { TaskWeek } from '../entities/task-week';
 import { TaskService } from '../services/task.service';
 
-export class TaskWeekStore extends Store<TaskWeek[]> {
+export class TaskWeekStore extends Store<TaskWeek> {
   constructor(private taskService: TaskService) {
     super(null);
   }
 
-  public loadOrCreate(accountId: number, date: Date) {
-    this.taskService.getTaskWeekList(accountId, date).subscribe(
-      (data: TaskWeek[]) => {
-        if (data.length === 0) {
-          const taskWeek = {id: null, weekStartDate: date, statusId: 1, daysCompleted: 0, accountId, value: 0};
-          this.taskService.putTaskWeek(taskWeek).subscribe(id => {
-              taskWeek.id = id;
-              this.setState([taskWeek]);
-          }  );
-        } else {
-          this.setState(data);
-        }
-
-
-      }
-    );
+  public loadData(accountId: number, selectedDate: Date): Promise<TaskWeek> {
+    return new Promise<TaskWeek>((resolve, reject) => {
+      this.taskService
+        .getTaskWeekList(accountId, selectedDate)
+        .then(taskWeekList => {
+          if (taskWeekList && taskWeekList.length > 0) {
+            this.setState(taskWeekList[0]);
+            resolve(taskWeekList[0]);
+          } else {
+            this.createNewTaskWeek(accountId, selectedDate).then(
+              newTaskWeek => {
+                this.setState(newTaskWeek);
+                resolve(newTaskWeek);
+              }
+            ).catch(error => reject(error));
+          }
+        }).catch(error => reject(error));
+      });
   }
 
-  public load(accountId: number, startDate: Date, endDate?: Date) {
-    this.taskService.getTaskWeekList(accountId, startDate, endDate).subscribe(
-      (data: TaskWeek[]) =>
-      this.setState(data));
+  createNewTaskWeek(accountId: number, weekStartDate: Date): Promise<TaskWeek> {
+    const taskWeek: TaskWeek = {
+      id: null,
+      weekStartDate,
+      statusId: 1,
+      daysCompleted: 0,
+      accountId,
+      value: 0
+    };
+    return new Promise<TaskWeek>((resolve, reject) => {
+      this.taskService
+        .putTaskWeek(taskWeek)
+        .then(id => {
+          taskWeek.id = id;
+          resolve(taskWeek);
+        })
+        .catch(error => reject(error));
+    });
   }
 }

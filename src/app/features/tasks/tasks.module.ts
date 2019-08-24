@@ -8,6 +8,8 @@ import { TaskListViewComponent } from './views/task-list-view/task-list-view.com
 import { TaskGroupFilterPipe } from './pipes/task-group-filter.pipe';
 import { DayListViewComponent } from './views/day-list-view/day-list-view.component';
 import { LookupFilterPipe } from 'src/app/core/pipes/lookup-filter.pipe';
+import { TaskDayListStore } from './stores/task-day-list.store';
+import { TaskWeekStore } from './stores/task-week.store';
 
 
 @NgModule({
@@ -17,6 +19,6 @@ import { LookupFilterPipe } from 'src/app/core/pipes/lookup-filter.pipe';
     TasksRoutingModule,
     SharedModule
   ],
-  providers: [ ]
+  providers: [TaskWeekStore, TaskDayListStore ]
 })
 export class TasksModule { }
