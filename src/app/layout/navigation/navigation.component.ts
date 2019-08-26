@@ -65,7 +65,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userStoreSub = this.userStore.state$.subscribe(u => {if (u) {this.userName = u.name; }} );
+    this.userStoreSub = this.userStore.state$.subscribe(u => { if (u) { this.userName = u.name; } });
     this.accountStoreSub = this.accountStore.state$.subscribe(account => this.account = account);
     this.loginFailSub = this.broadcastService.subscribe('msal:loginFailure', this.loginFail());
     this.loginSuccessSub = this.broadcastService.subscribe('msal:loginSuccess', this.loginSuccess());
@@ -99,12 +99,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
     const userName = user.idToken['emails'][0];
     this.userStore.setState(user);
     this.accountStore.load(userName);
-    this.authService.acquireTokenSilent(environment.contentScopes)
-      .then(token => localStorage.setItem('access_token', token))
-      .catch (reason =>
-    this.authService.acquireTokenPopup(environment.contentScopes)
-        .then(
+    if (environment.secureApi) {
+      this.authService.acquireTokenSilent(environment.contentScopes)
+        .then(token => localStorage.setItem('access_token', token))
+        .catch(reason =>
+          this.authService.acquireTokenPopup(environment.contentScopes)
+            .then(
               token => localStorage.setItem('access_token', token)));
+    }
   }
 
 

@@ -13,43 +13,29 @@ import { MsalService } from '@azure/msal-angular';
 export class DataService {
   constructor(private client: HttpClient, private authService: MsalService) {}
 
-  private get options() {
-    const token = localStorage.getItem('access_token');
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      })
-    };
-    return httpOptions;
-  }
   public getAccount(email: string): Observable<Account> {
     return this.client
       .get<Account>(
-        environment.dataApiUrl + 'accountset/' + email,
-        this.options
-        // + '?code=CatMggsxJAX7p1zhNXJK2w8taRanpEVPXc3J8J1EHdRLmHnuMEVfDA=='
+        environment.dataApiUrl + 'accountset/' + email
       )
       .pipe(catchError(this.handleError));
   }
   public getTaskGroupList(): Observable<Lookup[]> {
     return this.client
       .get<Lookup[]>(
-        environment.dataApiUrl + 'lookups/taskgroupset',
-        this.options
-      )
+        environment.dataApiUrl + 'lookups/taskgroupset'     )
       .pipe(catchError(this.handleError));
   }
 
   public getRoleList(): Observable<Lookup[]> {
     return this.client
-      .get<Lookup[]>(environment.dataApiUrl + 'lookups/roleset', this.options)
+      .get<Lookup[]>(environment.dataApiUrl + 'lookups/roleset')
       .pipe(catchError(this.handleError));
   }
   public getStatusList(): Observable<Lookup[]> {
     return this.client
-      .get<Lookup[]>(environment.dataApiUrl + 'lookups/statusset', this.options)
+      .get<Lookup[]>(environment.dataApiUrl + 'lookups/statusset')
       .pipe(catchError(this.handleError));
   }
 

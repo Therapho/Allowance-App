@@ -1,13 +1,14 @@
 export interface TaskActivity {
 
-   id: number;
+   id?: number;
    description: string;
    taskGroupId: number;
    completed: boolean;
    blocked: boolean;
    value: number;
 
-   forAccountId: number;
+   accountId: number;
    taskDayId: number;
    sequence: number;
+   taskWeekId: number;
 }

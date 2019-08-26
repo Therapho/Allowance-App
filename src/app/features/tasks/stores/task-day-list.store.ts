@@ -31,11 +31,7 @@ export class TaskDayListStore extends Store<TaskDay[]> {
     });
   }
 
-  createNewTaskDayList(
-    accountId: number,
-    taskWeekId: number,
-    startDate: Date
-  ): Promise<TaskDay[]> {
+  createNewTaskDayList(accountId: number, taskWeekId: number, startDate: Date): Promise<TaskDay[]> {
     return new Promise<TaskDay[]>((resolve, reject) => {
       const taskDayList: TaskDay[] = [];
 

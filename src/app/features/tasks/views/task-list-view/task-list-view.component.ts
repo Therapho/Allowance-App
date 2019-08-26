@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LookupStore } from 'src/app/core/stores/lookup.store';
-import { TaskDefinitionStore } from '../../stores/task-definition.store';
+import { TaskDefinitionListStore } from '../../stores/task-definition-list.store';
+import { TaskStore } from '../../stores/task.store';
 
 @Component({
   selector: 'app-task-list-view',
@@ -11,11 +12,11 @@ export class TaskListViewComponent implements OnInit {
 
   constructor(
     public lookupStore: LookupStore,
-    public taskDefinitionStore: TaskDefinitionStore
+    public taskStore: TaskStore
   ) { }
 
   ngOnInit() {
-    this.taskDefinitionStore.load();
+    // this.taskDefinitionListStore.loadData();
   }
 
 }

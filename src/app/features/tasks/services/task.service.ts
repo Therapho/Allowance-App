@@ -13,6 +13,31 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TaskService {
+  putTaskActivityList(taskActivityList: TaskActivity[]) {
+    return this.client.put(environment.dataApiUrl + 'taskactivityset' ,  taskActivityList).pipe(
+      map( returnId => +returnId)).toPromise();
+  }
+  getTaskActivityListByWeek(accountId: number, taskWeekId: number) {
+    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('accountid', accountId.toString());
+    const options = {params: parameters};
+    return this.client.get<TaskActivity[]>(environment.dataApiUrl + 'taskactivityset', options).pipe(
+      map((list: TaskActivity[]) => list.map(data => {
+        const taskWeek: TaskActivity = {
+          id: +data.id,
+          description: data.description,
+          taskGroupId: data.taskGroupId,
+          completed: data.completed,
+          blocked: data.blocked,
+          value: data.value,
+          accountId: +data.accountId,
+          taskDayId: +data.taskDayId,
+          sequence: +data.sequence,
+          taskWeekId: +data.taskWeekId
+        };
+        return taskWeek; })
+        ),
+      catchError(this.handleError)).toPromise();
+  }
 
 
   constructor(private client: HttpClient) { }

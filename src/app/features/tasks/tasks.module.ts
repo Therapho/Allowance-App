@@ -7,9 +7,11 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
 import { TaskListViewComponent } from './views/task-list-view/task-list-view.component';
 import { TaskGroupFilterPipe } from './pipes/task-group-filter.pipe';
 import { DayListViewComponent } from './views/day-list-view/day-list-view.component';
-import { LookupFilterPipe } from 'src/app/core/pipes/lookup-filter.pipe';
 import { TaskDayListStore } from './stores/task-day-list.store';
 import { TaskWeekStore } from './stores/task-week.store';
+import { TaskDefinitionListStore } from './stores/task-definition-list.store';
+import { TaskActivityListStore } from './stores/task-activity-list.store';
+import { TaskStore } from './stores/task.store';
 
 
 @NgModule({
@@ -19,6 +21,6 @@ import { TaskWeekStore } from './stores/task-week.store';
     TasksRoutingModule,
     SharedModule
   ],
-  providers: [TaskWeekStore, TaskDayListStore ]
+  providers: [TaskWeekStore, TaskDayListStore, TaskDefinitionListStore, TaskActivityListStore, TaskStore ]
 })
 export class TasksModule { }
