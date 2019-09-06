@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatCardModule, MatExpansionModule
+  MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatCardModule, MatExpansionModule, MatTableModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { LookupFilterPipe } from '../core/pipes/lookup-filter.pipe';
     FormsModule,
     LayoutModule,
     MatCheckboxModule,
+    MatTableModule
   ],
   exports: [
     LayoutModule,
@@ -37,7 +38,7 @@ import { LookupFilterPipe } from '../core/pipes/lookup-filter.pipe';
     FlexLayoutModule,
     FormsModule,
     LayoutModule,
-    MatCheckboxModule, LookupFilterPipe
+    MatCheckboxModule, LookupFilterPipe, MatTableModule
   ]
 })
 export class SharedModule { }

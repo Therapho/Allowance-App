@@ -17,7 +17,7 @@ export class TaskStore {
     private _taskDayListStore: TaskDayListStore,
     private _taskActivityListStore: TaskActivityListStore,
     private _taskDefinitionListStore: TaskDefinitionListStore
-  ) {}
+  ) { }
   private _accountId: number;
   private _selectedDate: Date;
 
@@ -41,23 +41,25 @@ export class TaskStore {
    * @param selectedDate the date to load the data for
    */
   public async loadData(accountId: number, selectedDate: Date) {
-    if (this._accountId !== accountId || this._selectedDate !== selectedDate) {
-      this._accountId = accountId;
-      this._selectedDate = selectedDate;
+    return new Promise((resolve, reject) => {
 
-      this._taskDefinitionListStore.loadData();
-      this._taskWeekStore.loadData(accountId, selectedDate)
-      .then(taskWeek => {
-          this._taskDayListStore.loadData(accountId, taskWeek.id, selectedDate)
-          .then(taskDayList => {
-            this._taskActivityListStore.loadDataWeek(accountId, taskWeek.id, taskDayList, this.taskDefinitionList);
-          });
-        }
-      )
-      .then(taskDayList => {
+      if (this._accountId !== accountId || this._selectedDate !== selectedDate) {
+        this._accountId = accountId;
+        this._selectedDate = selectedDate;
 
-      });
+        this._taskDefinitionListStore.loadData();
+        this._taskWeekStore.loadData(accountId, selectedDate)
+          .then(taskWeek => {
+            this._taskDayListStore.loadData(accountId, taskWeek.id, selectedDate)
+              .then(taskDayList => {
+                this._taskActivityListStore.loadDataWeek(accountId, taskWeek.id, taskDayList, this.taskDefinitionList)
+                  .then(() => resolve());
 
-    }
+              });
+          }
+          );
+      }
+    });
+
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
 import { AccountStore } from 'src/app/core/stores/account.store';
 import { DateUtilities } from 'src/app/core/utilities/dateUtilities';
 import { TaskStore } from '../../stores/task.store';
@@ -10,18 +9,42 @@ import { LookupStore } from 'src/app/core/stores/lookup.store';
   templateUrl: './day-list-view.component.html',
   styleUrls: ['./day-list-view.component.scss']
 })
-export class DayListViewComponent implements OnInit, OnDestroy {
+export class DayListViewComponent implements OnInit {
 
   public selectedDate: Date;
+  public taskActivityMatrix: any[];
+  public displayedColumns: string[] = ['description', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-  constructor(public accountStore: AccountStore, public taskStore: TaskStore, public lookUpStore: LookupStore) {  }
+  constructor(public accountStore: AccountStore, public taskStore: TaskStore, public lookUpStore: LookupStore) { }
 
   ngOnInit() {
     this.selectedDate = DateUtilities.getMonday(new Date());
-    this.taskStore.loadData(this.accountStore.state.id, this.selectedDate);
+    this.taskStore.loadData(this.accountStore.state.id, this.selectedDate)
+      .then(() => {
+        this.buildTaskActivityMatrix();
+      });
   }
+  buildTaskActivityMatrix() {
+    const taskActivityMatrix = [];
+    const taskActivityList = this.taskStore.taskActivityList;
 
-  ngOnDestroy() {
+    this.taskStore.taskDefinitionList.forEach((taskDefinition, index) => {
+      const taskIndex = index * 7;
+      taskActivityMatrix.push(
+        {
+          description: taskDefinition.description,
+          monday: taskActivityList[taskIndex],
+          tuesday: taskActivityList[taskIndex + 1],
+          wednesday: taskActivityList[taskIndex + 2],
+          thursday: taskActivityList[taskIndex + 3],
+          friday: taskActivityList[taskIndex + 4],
+          saturday: taskActivityList[taskIndex + 5],
+          sunday: taskActivityList[taskIndex + 6],
+        }
+      );
+
+      this.taskActivityMatrix = taskActivityMatrix;
+    });
 
   }
 }

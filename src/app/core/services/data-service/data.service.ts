@@ -38,7 +38,11 @@ export class DataService {
       .get<Lookup[]>(environment.dataApiUrl + 'lookups/statusset')
       .pipe(catchError(this.handleError));
   }
-
+  public getActivityStatusList(): Observable<Lookup[]> {
+    return this.client
+      .get<Lookup[]>(environment.dataApiUrl + 'lookups/activitystatusset')
+      .pipe(catchError(this.handleError));
+  }
   private handleError(err) {
     let errorMessage: string;
 
