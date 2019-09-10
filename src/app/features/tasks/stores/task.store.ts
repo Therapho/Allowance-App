@@ -12,6 +12,7 @@ import { TaskDefinition } from '../entities/task-definition';
   providedIn: 'root'
 })
 export class TaskStore {
+
   constructor(
     private _taskWeekStore: TaskWeekStore,
     private _taskDayListStore: TaskDayListStore,
@@ -52,7 +53,7 @@ export class TaskStore {
           .then(taskWeek => {
             this._taskDayListStore.loadData(accountId, taskWeek.id, selectedDate)
               .then(taskDayList => {
-                this._taskActivityListStore.loadDataWeek(accountId, taskWeek.id, taskDayList, this.taskDefinitionList)
+                  this._taskActivityListStore.loadDataWeek(accountId, taskWeek.id, taskDayList, this.taskDefinitionList)
                   .then(() => resolve());
 
               });
@@ -61,5 +62,8 @@ export class TaskStore {
       }
     });
 
+  }
+  saveTaskActivityList() {
+    this._taskActivityListStore.save();
   }
 }
