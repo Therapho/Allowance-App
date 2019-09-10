@@ -3,6 +3,9 @@ import { AccountStore } from 'src/app/core/stores/account.store';
 import { DateUtilities } from 'src/app/core/utilities/dateUtilities';
 import { TaskStore } from '../../stores/task.store';
 import { LookupStore } from 'src/app/core/stores/lookup.store';
+import { MatSlideToggleChange } from '@angular/material';
+import { TaskActivity } from '../../entities/task-activity';
+import { Constants } from '../../common/constants';
 
 @Component({
   selector: 'app-day-list-view',
@@ -14,6 +17,7 @@ export class DayListViewComponent implements OnInit {
   public selectedDate: Date;
   public taskActivityMatrix: any[];
   public displayedColumns: string[] = ['description', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  public mode = 'Complete';
 
   constructor(public accountStore: AccountStore, public taskStore: TaskStore, public lookUpStore: LookupStore) { }
 
@@ -23,7 +27,10 @@ export class DayListViewComponent implements OnInit {
       .then(() => {
         this.buildTaskActivityMatrix();
       });
+
   }
+
+
   buildTaskActivityMatrix() {
     const taskActivityMatrix = [];
     const taskActivityList = this.taskStore.taskActivityList;
@@ -46,5 +53,15 @@ export class DayListViewComponent implements OnInit {
       this.taskActivityMatrix = taskActivityMatrix;
     });
 
+  }
+  save() {
+    this.taskStore.saveTaskActivityList();
+  }
+  public statusChange(taskActivity: TaskActivity) {
+    if (taskActivity.statusId === Constants.ActivityStatus.Complete) {
+      this.taskStore.taskWeek.value += taskActivity.value;
+    } else {
+      this.taskStore.taskWeek.value -= taskActivity.value;
+    }
   }
 }

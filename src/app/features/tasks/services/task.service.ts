@@ -48,8 +48,7 @@ export class TaskService {
       catchError(this.handleError)).toPromise();
   }
   putTaskActivityList(taskActivityList: TaskActivity[]) {
-    return this.client.put(environment.dataApiUrl + 'taskactivityset' ,  taskActivityList).pipe(
-      map( returnId => +returnId)).toPromise();
+    return this.client.put(environment.dataApiUrl + 'taskactivityset' ,  taskActivityList).toPromise();
   }
   getTaskActivityListByWeek(accountId: number, taskWeekId: number) {
     const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('accountid', accountId.toString());

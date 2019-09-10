@@ -1,29 +1,25 @@
 table {
   width: 100%;
-
+  border: lightgray thick solid;
 }
 .mat-cell{
   width:10%;
-  border: white thick solid;
+  height:50px;
+  border: lightgray thin solid;
+  text-align: center;
 }
 .mat-header-cell{
   text-align: center;
   font-size: 1.1em;
   font-weight: bolder;
+  border: lightgray thin solid;
 }
 .mat-column-description{
   width:30%;
+
 }
 
-.Incomplete{
-  background-color: grey;
-}
-.Complete {
-  background-color:green;
-}
-.Blocked {
-  background-color: red;
-}
+
 .taskListCard{
  width:75%;
  margin: 30 px auto;

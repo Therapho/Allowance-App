@@ -12,10 +12,11 @@ import { TaskWeekStore } from './stores/task-week.store';
 import { TaskDefinitionListStore } from './stores/task-definition-list.store';
 import { TaskActivityListStore } from './stores/task-activity-list.store';
 import { TaskStore } from './stores/task.store';
+import { TaskCheckboxComponent } from './components/task-checkbox/task-checkbox.component';
 
 
 @NgModule({
-  declarations: [TaskCardComponent, TaskListViewComponent, TaskGroupFilterPipe, DayListViewComponent] ,
+  declarations: [TaskCardComponent, TaskListViewComponent, TaskGroupFilterPipe, DayListViewComponent, TaskCheckboxComponent] ,
   imports: [
     CommonModule,
     TasksRoutingModule,
