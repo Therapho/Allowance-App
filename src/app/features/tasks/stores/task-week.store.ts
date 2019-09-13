@@ -3,6 +3,7 @@ import { TaskWeek } from '../entities/task-week';
 import { TaskService } from '../services/task.service';
 
 export class TaskWeekStore extends Store<TaskWeek> {
+
   constructor(private taskService: TaskService) {
     super(null);
   }
@@ -16,5 +17,8 @@ export class TaskWeekStore extends Store<TaskWeek> {
             resolve(taskWeek);
         }).catch(error => reject(error));
       });
+  }
+  save() {
+    this.taskService.putTaskWeek(this.state);
   }
 }

@@ -20,14 +20,14 @@ export class TaskService {
       map((list: TaskActivity[]) => list.map(data => {
         const taskActivity: TaskActivity = {
           id: +data.id,
-          description: data.description,
           taskGroupId: data.taskGroupId,
-          value: data.value,
           accountId: +data.accountId,
           taskDayId: +data.taskDayId,
           sequence: +data.sequence,
           taskWeekId: +data.taskWeekId,
-          statusId: +data.statusId
+          statusId: +data.statusId,
+          taskDefinitionId: +data.taskDefinitionId,
+          daySequence: +data.daySequence
         };
         return taskActivity; })
         ),
@@ -57,14 +57,14 @@ export class TaskService {
       map((list: TaskActivity[]) => list.map(data => {
         const taskWeek: TaskActivity = {
           id: +data.id,
-          description: data.description,
           taskGroupId: data.taskGroupId,
-          value: data.value,
           accountId: +data.accountId,
           taskDayId: +data.taskDayId,
           sequence: +data.sequence,
           taskWeekId: +data.taskWeekId,
-          statusId: +data.statusId
+          statusId: +data.statusId,
+          taskDefinitionId: +data.taskDefinitionId,
+          daySequence: +data.daySequence
         };
         return taskWeek; })
         ),

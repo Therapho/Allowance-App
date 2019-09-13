@@ -1,14 +1,26 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+const apiScope =
+  'https://allowance.onmicrosoft.com/allowanceapi/user_impersonation';
+const dataApiUrl = 'https://allowance-functions.azurewebsites.net/api/';
+
+const graphScope = 'user.read';
+const graphUrl = 'https://graph.microsoft.com/v1.0/me';
+
 export const environment = {
-  production: true,
-  authority: 'https://sts.windows.net/d40657b0-e2d2-431e-b401-c036ba8a425b/',
-  dataApiUrl: 'https://allowance-functions.azurewebsites.net/api/',
+  production: false,
+  authority:
+    'https://allowance.b2clogin.com/allowance.onmicrosoft.com/B2C_1_SignUpSignIn',
+  dataApiUrl,
   appPath: 'https://allowancestorage.z9.web.core.windows.net/',
   appTitle: 'Allowance',
-  clientId: '88bd734d-2378-4e04-a900-1bf83b88a43f',
+  clientId: '45ef1ae1-c126-4314-b819-c6adb6c0fb42',
   cacheLocation: 'localStorage',
-  contentScopes: [
-    'user.read',
-    // 'api://1663b9c6-436f-49e9-84b1-684638c20921/Child.Write',
-    'api://1663b9c6-436f-49e9-84b1-684638c20921/Allowance.Access'
-  ]
+  validateAthority: false,
+  apiScope,
+  contentScopes: [apiScope],
+  protectedResourceMap: [[dataApiUrl, [apiScope]]],
+  secureApi:  true
 };
+

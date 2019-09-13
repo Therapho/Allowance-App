@@ -13,6 +13,7 @@ import { TaskDefinition } from '../entities/task-definition';
 })
 export class TaskStore {
 
+
   constructor(
     private _taskWeekStore: TaskWeekStore,
     private _taskDayListStore: TaskDayListStore,
@@ -65,5 +66,8 @@ export class TaskStore {
   }
   saveTaskActivityList() {
     this._taskActivityListStore.save();
+  }
+  saveTaskWeek() {
+    this._taskWeekStore.save();
   }
 }

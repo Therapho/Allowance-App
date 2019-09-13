@@ -43,4 +43,17 @@ export class TaskCheckboxComponent implements OnInit {
     this.taskActivity.statusId = statusId;
     this.statusChange.emit(this.taskActivity);
   }
+  onPress(event) {
+    let statusId = this.taskActivity.statusId;
+
+    if (statusId === Constants.ActivityStatus.Complete || statusId === Constants.ActivityStatus.Blocked) {
+      statusId = Constants.ActivityStatus.Incomplete;
+      this.status = 'Incomplete';
+
+      this.taskActivity.statusId = statusId;
+      this.statusChange.emit(this.taskActivity);
+
+    }
+    event.preventDefault();
+  }
 }

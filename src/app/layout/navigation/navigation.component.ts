@@ -72,8 +72,15 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     const user = this.authService.getUser();
     if (user) {
+      // tslint:disable-next-line: no-string-literal
+      // if (Date.now() > user.idToken['exp']) {
+      //   // this.authService.logout();
+
+      // } else {
       this.setupLogin(user);
+
     }
+
 
   }
   private loginFail() {
