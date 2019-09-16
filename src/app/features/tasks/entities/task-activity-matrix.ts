@@ -1,16 +1,8 @@
 import { TaskActivity } from './task-activity';
+import { TaskActivityItem } from './task-activity-item';
 
 export interface TaskActivityMatrix {
   groupName: string;
   items: TaskActivityItem[];
 }
-export interface TaskActivityItem {
-  description: string;
-  monday: TaskActivity;
-  tuesday: TaskActivity;
-  wednesday: TaskActivity;
-  thursday: TaskActivity;
-  friday: TaskActivity;
-  saturday: TaskActivity;
-  sunday: TaskActivity;
-}
+

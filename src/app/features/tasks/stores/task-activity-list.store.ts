@@ -10,17 +10,14 @@ export class TaskActivityListStore extends Store<TaskActivity[]> {
     super(null);
   }
   public save(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.taskService.putTaskActivityList(this.state)
-        .then(() => resolve(true))
-        .catch (error => reject(error));
-    });
+    return this.taskService.putTaskActivityList(this.state);
+
   }
 
-  public loadDataWeek(accountId: number, taskWeekId: number, taskDayList: TaskDay[], taskDefinitionList: TaskDefinition[]):
+  public loadDataWeek(userIdentifier: string, taskWeekId: number, taskDayList: TaskDay[], taskDefinitionList: TaskDefinition[]):
     Promise < TaskActivity[] > {
     return new Promise<TaskActivity[]>((resolve, reject) => {
-      this.taskService.getOrCreateTaskActivityList(accountId, taskWeekId)
+      this.taskService.getOrCreateTaskActivityList(userIdentifier, taskWeekId)
         .then((taskActivityList: TaskActivity[]) => {
 
             this.setState(taskActivityList);

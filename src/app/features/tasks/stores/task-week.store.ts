@@ -8,17 +8,17 @@ export class TaskWeekStore extends Store<TaskWeek> {
     super(null);
   }
 
-  public loadData(accountId: number, selectedDate: Date): Promise<TaskWeek> {
+  public loadData(userIdentifier: string, selectedDate: Date): Promise<TaskWeek> {
     return new Promise<TaskWeek>((resolve, reject) => {
       this.taskService
-        .getOrCreateTaskWeek(accountId, selectedDate)
+        .getOrCreateTaskWeek(userIdentifier, selectedDate)
         .then(taskWeek => {
             this.setState(taskWeek);
             resolve(taskWeek);
         }).catch(error => reject(error));
       });
   }
-  save() {
-    this.taskService.putTaskWeek(this.state);
+  save(): Promise<any> {
+    return this.taskService.putTaskWeek(this.state);
   }
 }

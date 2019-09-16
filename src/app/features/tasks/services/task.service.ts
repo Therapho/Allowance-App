@@ -13,52 +13,53 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TaskService {
-  getOrCreateTaskActivityList(accountId: number, taskWeekId: number) {
-    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('accountid', accountId.toString());
+  getOrCreateTaskActivityList(userIdentifier: string, taskWeekId: number): Promise<TaskActivity[]> {
+    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('useridentifier', userIdentifier);
     const options = {params: parameters};
-    return this.client.get<TaskActivity[]>(environment.dataApiUrl + 'getorcreatetaskactivitylist', options).pipe(
+
+    return this.client.get<TaskActivity[]>(environment.dataApiUrl + '/getorcreatetaskactivitylist', options).pipe(
       map((list: TaskActivity[]) => list.map(data => {
         const taskActivity: TaskActivity = {
           id: +data.id,
           taskGroupId: data.taskGroupId,
-          accountId: +data.accountId,
           taskDayId: +data.taskDayId,
           sequence: +data.sequence,
           taskWeekId: +data.taskWeekId,
           statusId: +data.statusId,
           taskDefinitionId: +data.taskDefinitionId,
-          daySequence: +data.daySequence
+          daySequence: +data.daySequence,
+          userIdentifier: data. userIdentifier
         };
         return taskActivity; })
         ),
       catchError(this.handleError)).toPromise();
   }
-  getOrCreateTaskWeek(accountId: number, startDate: Date): Promise<TaskWeek> {
-    const parameters = new HttpParams().set('accountid', accountId.toString()).set('startdate', startDate.toISOString());
+  getOrCreateTaskWeek(userIdentifier: string, startDate: Date): Promise<TaskWeek> {
+    const parameters = new HttpParams().set('useridentifier', userIdentifier).set('startdate', startDate.toISOString());
 
     const options = {params: parameters};
-    return this.client.get<TaskWeek>(environment.dataApiUrl + 'getorcreatetaskweek', options).pipe(
+    return this.client.get<TaskWeek>(environment.dataApiUrl + '/getorcreatetaskweek', options).pipe(
       map((data: TaskWeek) => {
         const taskWeek: TaskWeek = {
           id: +data.id, weekStartDate: new Date(data.weekStartDate),
-          statusId: +data.statusId, value: +data.value, accountId: +data.accountId, daysCompleted: +data.daysCompleted
+          statusId: +data.statusId, value: +data.value, userIdentifier: data.userIdentifier
         };
         return taskWeek; }
       ),
       catchError(this.handleError)).toPromise();
   }
   putTaskActivityList(taskActivityList: TaskActivity[]) {
-    return this.client.put(environment.dataApiUrl + 'taskactivityset' ,  taskActivityList).toPromise();
+    return this.client.put(environment.dataApiUrl + '/taskactivityset' ,  taskActivityList).toPromise();
   }
-  getTaskActivityListByWeek(accountId: number, taskWeekId: number) {
-    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('accountid', accountId.toString());
+  getTaskActivityListByWeek(userIdentifier: string, taskWeekId: number) {
+    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('useridentifier', userIdentifier);
     const options = {params: parameters};
-    return this.client.get<TaskActivity[]>(environment.dataApiUrl + 'taskactivityset', options).pipe(
+    return this.client.get<TaskActivity[]>(environment.dataApiUrl + '/taskactivityset', options).pipe(
       map((list: TaskActivity[]) => list.map(data => {
         const taskWeek: TaskActivity = {
           id: +data.id,
           taskGroupId: data.taskGroupId,
-          accountId: +data.accountId,
+          userIdentifier: data.userIdentifier,
           taskDayId: +data.taskDayId,
           sequence: +data.sequence,
           taskWeekId: +data.taskWeekId,
@@ -77,38 +78,38 @@ export class TaskService {
   putTaskWeek(taskWeek: TaskWeek): Promise<number> {
     const id = taskWeek.id ? taskWeek.id.toString() : '';
 
-    return this.client.put(environment.dataApiUrl + 'taskweekset/' + id, taskWeek).pipe(
+    return this.client.put(environment.dataApiUrl + '/taskweekset/' + id, taskWeek).pipe(
       map( returnId => +returnId),
       catchError(this.handleError)).toPromise();
   }
   putTaskDay(taskDay: TaskDay): Promise<number> {
     const id = taskDay.id ? taskDay.id.toString() : '';
 
-    return this.client.put(environment.dataApiUrl + 'taskdayset/' + id, taskDay).pipe(
+    return this.client.put(environment.dataApiUrl + '/taskdayset/' + id, taskDay).pipe(
       map( returnId => +returnId),
       catchError(this.handleError)).toPromise();
   }
-  getTaskWeekList(accountId: number, startDate: Date, endDate?: Date): Promise<TaskWeek[]> {
-    const parameters = new HttpParams().set('accountid', accountId.toString()).set('startdate', startDate.toISOString());
+  getTaskWeekList(userIdentifier: string, startDate: Date, endDate?: Date): Promise<TaskWeek[]> {
+    const parameters = new HttpParams().set('useridentifier', userIdentifier).set('startdate', startDate.toISOString());
     if (endDate) { parameters.set('enddate', endDate.toISOString()); }
     const options = {params: parameters};
-    return this.client.get<TaskWeek[]>(environment.dataApiUrl + 'taskweekset', options).pipe(
+    return this.client.get<TaskWeek[]>(environment.dataApiUrl + '/taskweekset', options).pipe(
       map((list: TaskWeek[]) => list.map(data => {
         const taskWeek: TaskWeek = {
           id: +data.id, weekStartDate: new Date(data.weekStartDate),
-          statusId: +data.statusId, value: +data.value, accountId: +data.accountId, daysCompleted: +data.daysCompleted
+          statusId: +data.statusId, value: +data.value, userIdentifier: data.userIdentifier
         };
         return taskWeek; })
         ),
       catchError(this.handleError)).toPromise();
   }
-  getTaskDayList(accountId: number, taskWeekId: number): Promise<TaskDay[]> {
-    const options = {params: new HttpParams().set('accountid', accountId.toString()).set('taskweekid', taskWeekId.toString()) };
-    return this.client.get<TaskDay[]>(environment.dataApiUrl + 'taskdayset', options).pipe(
+  getTaskDayList(userIdentifier: string, taskWeekId: number): Promise<TaskDay[]> {
+    const options = {params: new HttpParams().set('useridentifier', userIdentifier).set('taskweekid', taskWeekId.toString()) };
+    return this.client.get<TaskDay[]>(environment.dataApiUrl + '/taskdayset', options).pipe(
       map((list: TaskDay[]) => list.map(data => {
         const taskDay: TaskDay = {
           id: +data.id, date: new Date(data.date),
-          statusId: +data.statusId, value: +data.value, accountId: +data.accountId, taskWeekId: +data.taskWeekId
+          statusId: +data.statusId, value: +data.value, userIdentifier: data.userIdentifier, taskWeekId: +data.taskWeekId
         };
         return taskDay; })
         ),
@@ -116,7 +117,7 @@ export class TaskService {
   }
 
   public getTaskDefinitionList(): Promise<TaskDefinition[]> {
-    return this.client.get<TaskDefinition[]>(environment.dataApiUrl + 'taskdefinitionset').pipe(
+    return this.client.get<TaskDefinition[]>(environment.dataApiUrl + '/taskdefinitionset').pipe(
       catchError(this.handleError)).toPromise();
   }
 

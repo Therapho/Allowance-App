@@ -5,5 +5,4 @@ export interface TaskDefinition {
   value: number;
   sequence: number;
   weekly: boolean;
-  maximum: number;
 }

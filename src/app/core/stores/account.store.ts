@@ -8,9 +8,15 @@ export class AccountStore extends Store<Account> {
     super(null);
   }
 
-  public load(email: string) {
-    this.dataService.getAccount(email).subscribe(
-      (data: Account) =>
-      this.setState(data));
+  public load(userIdentifier: string): Promise<Account> {
+    return new Promise<Account>((resolve, reject) => {
+      this.dataService.getAccount(userIdentifier).then(
+        (data: Account) => {
+          this.setState(data);
+          resolve(data);
+        })
+        .catch(error => reject(error));
+
+    });
   }
 }

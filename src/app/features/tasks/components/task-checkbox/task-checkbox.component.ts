@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { TaskActivity } from '../../entities/task-activity';
-import { Constants } from '../../common/constants';
+import { Constants } from 'src/app/core/common/constants';
+
 
 @Component({
   selector: 'app-task-checkbox',

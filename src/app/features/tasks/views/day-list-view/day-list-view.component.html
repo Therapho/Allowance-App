@@ -1,3 +1,4 @@
+<div class='header'>
 <mat-card class="profileCard">
   <mat-card-header>
     <mat-card-title>Task Week</mat-card-title>
@@ -27,15 +28,7 @@
       </div>
     </div>
     <div fxLayout="row" fxLayout.xs="column">
-      <div
-        fxFlex="0 0 50%"
-        fxLayout="row"
-        ngClass="fieldset"
-        ngClass.xs="fieldsetxs"
-      >
-        <div fxFlex="0 0 50%" class="label">Days Completed</div>
-        <div fxFlex="0 0 50%">{{ taskStore.taskWeek.daysCompleted }}</div>
-      </div>
+
       <div
         fxFlex="0 0 50%"
         fxLayout="row"
@@ -48,15 +41,12 @@
         </div>
       </div>
     </div>
-  </mat-card-content>
-</mat-card>
-
-<mat-card class='profileCard'>
-  <mat-card-content>
     <button mat-raised-button (click)="save()" >Save</button>
   </mat-card-content>
 </mat-card>
 
+
+</div>
 <mat-card ngClass="profileCard" ngClass.xs="taskListCard-xs"
    *ngIf='taskActivityMatrixList'>
   <mat-card-content>

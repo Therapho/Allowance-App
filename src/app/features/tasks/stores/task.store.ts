@@ -20,7 +20,7 @@ export class TaskStore {
     private _taskActivityListStore: TaskActivityListStore,
     private _taskDefinitionListStore: TaskDefinitionListStore
   ) { }
-  private _accountId: number;
+  private userIdentifier: string;
   private _selectedDate: Date;
 
 
@@ -39,22 +39,22 @@ export class TaskStore {
   /**
    * Loads the state's data if it isn't already loeaded for the specified parameters.
    * If the parameters match previous loads, nothing new is loaded
-   * @param accountId the accountId of the required data.
+   * @param userIdentifier the user object id for the data required.
    * @param selectedDate the date to load the data for
    */
-  public async loadData(accountId: number, selectedDate: Date) {
+  public async loadData(userIdentifier: string, selectedDate: Date) {
     return new Promise((resolve, reject) => {
 
-      if (this._accountId !== accountId || this._selectedDate !== selectedDate) {
-        this._accountId = accountId;
+      if (this.userIdentifier !== userIdentifier || this._selectedDate !== selectedDate) {
+        this.userIdentifier = userIdentifier;
         this._selectedDate = selectedDate;
 
         this._taskDefinitionListStore.loadData();
-        this._taskWeekStore.loadData(accountId, selectedDate)
+        this._taskWeekStore.loadData(userIdentifier, selectedDate)
           .then(taskWeek => {
-            this._taskDayListStore.loadData(accountId, taskWeek.id, selectedDate)
+            this._taskDayListStore.loadData(userIdentifier, taskWeek.id, selectedDate)
               .then(taskDayList => {
-                  this._taskActivityListStore.loadDataWeek(accountId, taskWeek.id, taskDayList, this.taskDefinitionList)
+                  this._taskActivityListStore.loadDataWeek(userIdentifier, taskWeek.id, taskDayList, this.taskDefinitionList)
                   .then(() => resolve());
 
               });
@@ -64,10 +64,10 @@ export class TaskStore {
     });
 
   }
-  saveTaskActivityList() {
-    this._taskActivityListStore.save();
+  saveTaskActivityList(): Promise<any> {
+    return this._taskActivityListStore.save();
   }
-  saveTaskWeek() {
-    this._taskWeekStore.save();
+  saveTaskWeek(): Promise<any> {
+    return this._taskWeekStore.save();
   }
 }

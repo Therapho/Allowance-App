@@ -30,3 +30,8 @@ tr.mat-header-row {
   width:95%;
   margin: 25 px auto;
 }
+.header{
+  position: sticky;
+  z-index: 1;
+  top:70px;
+}

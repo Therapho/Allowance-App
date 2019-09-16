@@ -44,31 +44,44 @@ export class LookupStore {
 
   loadRoles() {
     this._roles = new Store<Lookup[]>(null);
-    this.dataService.getRoleList().subscribe(
-      (data: Lookup[]) =>
-        this._roles.setState(data));
+
+    this.dataService.getRoleList().then(
+      (data: Lookup[]) => {
+        this._roles.setState(data);
+      });
   }
 
   loadStatus() {
     this._status = new Store<Lookup[]>(null);
-    this.dataService.getStatusList().subscribe(
-      (data: Lookup[]) =>
-        this._status.setState(data));
+
+    this.dataService.getStatusList().then(
+        (data: Lookup[]) => {
+          this._status.setState(data);
+
+        });
+
   }
 
   loadActivityStatus() {
     this._activityStatus = new Store<Lookup[]>(null);
-    this.dataService.getActivityStatusList().subscribe(
-      (data: Lookup[]) =>
-        this._activityStatus.setState(data));
+
+    this.dataService.getActivityStatusList().then(
+        (data: Lookup[]) => {
+          this._activityStatus.setState(data);
+
+        });
+
   }
 
 
   loadTaskGroups() {
     this._taskGroups = new Store<Lookup[]>(null);
-    this.dataService.getTaskGroupList().subscribe(
-      (data: Lookup[]) =>
-        this._taskGroups.setState(data));
+    this.dataService.getTaskGroupList().then(
+        (data: Lookup[]) => {
+          this._taskGroups.setState(data);
+
+        });
+
   }
   getName(id: number, lookupName: string) {
 

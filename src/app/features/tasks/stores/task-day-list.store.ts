@@ -8,13 +8,13 @@ export class TaskDayListStore extends Store<TaskDay[]> {
   }
 
   public loadData(
-    accountId: number,
+    userIdentifier: string,
     taskWeekId: number,
     weekStartDate: Date
   ): Promise<TaskDay[]> {
     return new Promise<TaskDay[]>((resolve, reject) => {
       this.taskService
-        .getTaskDayList(accountId, taskWeekId)
+        .getTaskDayList(userIdentifier, taskWeekId)
         .then(taskWeekList => {
             this.setState(taskWeekList);
             resolve(taskWeekList);
