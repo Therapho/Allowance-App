@@ -11,50 +11,52 @@ import { MsalService } from '@azure/msal-angular';
   providedIn: 'root'
 })
 export class DataService {
+  getAccountList(Child: number) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private client: HttpClient, private authService: MsalService) {}
 
 
-  public getAccount(email: string): Observable<Account> {
-    return this.client
-      .get<Account>(
-        environment.dataApiUrl + 'accountset/' + email
-      )
-      .pipe(catchError(this.handleError));
+  public getAccount(userIdentifier: string): Promise<Account> {
+    const parameters = new HttpParams().set('useridentifier', userIdentifier);
+    const options = {params: parameters};
+
+    return new Promise<Account>((resolve, reject) => {
+      this.client.get<Account[]>(environment.dataApiUrl + '/accountset' , options).toPromise()
+      .then(accountList => resolve(accountList[0]))
+      .catch(error => reject(error));
+    });
+
   }
-  public getTaskGroupList(): Observable<Lookup[]> {
-    return this.client
-      .get<Lookup[]>(
-        environment.dataApiUrl + 'lookups/taskgroupset'     )
-      .pipe(catchError(this.handleError));
+  public getTaskGroupList(): Promise<Lookup[]> {
+    return new Promise<Lookup[]>((resolve, reject) => {
+      this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/taskgroupset').toPromise()
+      .then(lookup => resolve(lookup))
+      .catch(error => reject(error));
+    });
   }
 
-  public getRoleList(): Observable<Lookup[]> {
-    return this.client
-      .get<Lookup[]>(environment.dataApiUrl + 'lookups/roleset')
-      .pipe(catchError(this.handleError));
+  public getRoleList(): Promise<Lookup[]> {
+    return new Promise<Lookup[]>((resolve, reject) => {
+      this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/roleset').toPromise()
+      .then(lookup => resolve(lookup))
+      .catch(error => reject(error));
+    });
   }
-  public getStatusList(): Observable<Lookup[]> {
-    return this.client
-      .get<Lookup[]>(environment.dataApiUrl + 'lookups/statusset')
-      .pipe(catchError(this.handleError));
-  }
-  public getActivityStatusList(): Observable<Lookup[]> {
-    return this.client
-      .get<Lookup[]>(environment.dataApiUrl + 'lookups/activitystatusset')
-      .pipe(catchError(this.handleError));
-  }
-  private handleError(err) {
-    let errorMessage: string;
 
-    if (err) {
-      errorMessage = err;
-    } else if (err.error && err.error.message) {
-      errorMessage = err.error.message;
-    } else if (err.message) {
-      errorMessage = err.message;
-    }
+  public getStatusList(): Promise<Lookup[]> {
+    return new Promise<Lookup[]>((resolve, reject) => {
+      this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/statusset').toPromise()
+      .then(lookup => resolve(lookup))
+      .catch(error => reject(error));
+    });
 
-    console.log(`An error occurred: ${errorMessage}`);
-    return throwError(errorMessage);
+  }
+  public getActivityStatusList(): Promise<Lookup[]> {
+    return new Promise<Lookup[]>((resolve, reject) => {
+      this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/activitystatusset').toPromise()
+      .then(lookup => resolve(lookup))
+      .catch(error => reject(error));
+    });
   }
 }

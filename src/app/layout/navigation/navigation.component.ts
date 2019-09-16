@@ -22,9 +22,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     .pipe(
       map(result => result.matches)
     );
-  userStoreSub: Subscription;
-  accountStoreSub: Subscription;
-  account: Account;
+
   loginFailSub: Subscription;
   loginSuccessSub: Subscription;
 
@@ -51,8 +49,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
   title = environment.appTitle;
   loggedIn: boolean;
 
-  public userName: string;
-
   private subscription: Subscription;
   public data: string;
 
@@ -65,8 +61,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userStoreSub = this.userStore.state$.subscribe(u => { if (u) { this.userName = u.name; } });
-    this.accountStoreSub = this.accountStore.state$.subscribe(account => this.account = account);
+
     this.loginFailSub = this.broadcastService.subscribe('msal:loginFailure', this.loginFail());
     this.loginSuccessSub = this.broadcastService.subscribe('msal:loginSuccess', this.loginSuccess());
 
@@ -104,8 +99,10 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.loggedIn = true;
     // tslint:disable-next-line: no-string-literal - Dynamics property
     const userName = user.idToken['emails'][0];
+    // tslint:disable-next-line: no-string-literal
+    const userIdentifier = user.idToken['sub'];
     this.userStore.setState(user);
-    this.accountStore.load(userName);
+    this.accountStore.load(userIdentifier);
     if (environment.secureApi) {
       this.authService.acquireTokenSilent(environment.contentScopes)
         .then(token => localStorage.setItem('access_token', token))
@@ -121,12 +118,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.broadcastService.getMSALSubject().next(1);
 
 
-    if (this.userStoreSub) {
-      this.userStoreSub.unsubscribe();
-    }
-    if (this.accountStoreSub) {
-      this.accountStoreSub.unsubscribe();
-    }
+
     if (this.loginFailSub) {
       this.loginFailSub.unsubscribe();
     }
