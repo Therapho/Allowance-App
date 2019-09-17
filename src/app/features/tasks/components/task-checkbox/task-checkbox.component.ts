@@ -13,6 +13,7 @@ export class TaskCheckboxComponent implements OnInit {
   @Input() taskActivity: TaskActivity = null;
   @Input() mode = '';
   @Output() statusChange: EventEmitter<TaskActivity> = new EventEmitter();
+  @Output() clear: EventEmitter<TaskActivity> = new EventEmitter();
   public status = '';
   constructor() { }
 
@@ -47,12 +48,15 @@ export class TaskCheckboxComponent implements OnInit {
   onPress(event) {
     let statusId = this.taskActivity.statusId;
 
+    if (statusId === Constants.ActivityStatus.Complete) {
+      this.clear.emit(this.taskActivity);
+    }
     if (statusId === Constants.ActivityStatus.Complete || statusId === Constants.ActivityStatus.Blocked) {
       statusId = Constants.ActivityStatus.Incomplete;
       this.status = 'Incomplete';
 
       this.taskActivity.statusId = statusId;
-      this.statusChange.emit(this.taskActivity);
+
 
     }
     event.preventDefault();

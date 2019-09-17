@@ -1,0 +1,36 @@
+table {
+  width: 100%;
+  border: lightgray thick solid;
+}
+.mat-cell{
+  width:10%;
+  height:50px;
+  border: lightgray thin solid;
+  text-align: center;
+}
+.mat-column-description{
+  text-align: left;
+  font-weight: bold;
+}
+.mat-header-cell{
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: bolder;
+  border: lightgray thin solid;
+}
+.mat-column-description{
+  width:30%;
+
+}
+tr.mat-header-row {
+  height: 26px;
+}
+
+.taskListCard{
+ width:75%;
+ margin: 30 px auto;
+}
+.taskListCard-xs{
+  width:95%;
+  margin: 25 px auto;
+}

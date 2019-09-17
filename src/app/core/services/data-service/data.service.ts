@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Account } from '../../entities/account';
 import { environment } from '../../../../environments/environment';
 import { Lookup } from '../../entities/lookup';
@@ -11,9 +11,7 @@ import { MsalService } from '@azure/msal-angular';
   providedIn: 'root'
 })
 export class DataService {
-  getAccountList(Child: number) {
-    throw new Error('Method not implemented.');
-  }
+
   constructor(private client: HttpClient, private authService: MsalService) {}
 
 
@@ -28,7 +26,18 @@ export class DataService {
     });
 
   }
-  public getTaskGroupList(): Promise<Lookup[]> {
+  getAccountList(): Promise<Account[]> {
+    return new Promise<Account[]>((resolve, reject) => {
+      this.client.get<Account[]>(environment.dataApiUrl + '/accountset').pipe(
+        map((list: Account[]) => list.map(data => {
+          return Account.map(data);
+        }))
+      ).toPromise()
+      .then(accountList => resolve(accountList))
+      .catch(error => reject(error));
+    });
+  }
+  public getTaskGroupList(): Promise < Lookup[] > {
     return new Promise<Lookup[]>((resolve, reject) => {
       this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/taskgroupset').toPromise()
       .then(lookup => resolve(lookup))
@@ -36,7 +45,7 @@ export class DataService {
     });
   }
 
-  public getRoleList(): Promise<Lookup[]> {
+  public getRoleList(): Promise < Lookup[] > {
     return new Promise<Lookup[]>((resolve, reject) => {
       this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/roleset').toPromise()
       .then(lookup => resolve(lookup))
@@ -44,7 +53,7 @@ export class DataService {
     });
   }
 
-  public getStatusList(): Promise<Lookup[]> {
+  public getStatusList(): Promise < Lookup[] > {
     return new Promise<Lookup[]>((resolve, reject) => {
       this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/statusset').toPromise()
       .then(lookup => resolve(lookup))
@@ -52,7 +61,7 @@ export class DataService {
     });
 
   }
-  public getActivityStatusList(): Promise<Lookup[]> {
+  public getActivityStatusList(): Promise < Lookup[] > {
     return new Promise<Lookup[]>((resolve, reject) => {
       this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/activitystatusset').toPromise()
       .then(lookup => resolve(lookup))

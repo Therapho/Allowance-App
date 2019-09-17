@@ -1,0 +1,11 @@
+<mat-card>
+  <mat-card-content>
+    <mat-list *ngIf='taskWeekListStore.state'>
+      <mat-list-item *ngFor="let taskWeek of taskWeekListStore.state">
+        {{accountStore.accountList | accountFilter :  taskWeek.userIdentifier}} :
+         {{taskWeek.weekStartDate | date: "yyyy/MM/dd" }} :
+        {{lookupStore.status | lookupFilter: taskWeek.statusId}} &nbsp;
+        <a mat-flat [routerLink]='["details", taskWeek.id]'>View</a></mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

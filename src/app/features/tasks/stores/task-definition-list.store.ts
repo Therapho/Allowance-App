@@ -6,7 +6,9 @@ import { TaskService } from '../services/task.service';
 @Injectable()
 export class TaskDefinitionListStore extends Store<TaskDefinition[]> {
   constructor(private taskService: TaskService) {
+
     super(null);
+    this.loadData();
   }
   loadData() {
     this.taskService.getTaskDefinitionList().then(

@@ -3,6 +3,7 @@ import { Store } from 'src/app/core/types/store';
 import { TaskService } from '../services/task.service';
 import { TaskDay } from '../entities/task-day';
 import { TaskDefinition } from '../entities/task-definition';
+import { TaskWeek } from '../entities/task-week';
 
 export class TaskActivityListStore extends Store<TaskActivity[]> {
 
@@ -14,10 +15,10 @@ export class TaskActivityListStore extends Store<TaskActivity[]> {
 
   }
 
-  public loadDataWeek(userIdentifier: string, taskWeekId: number, taskDayList: TaskDay[], taskDefinitionList: TaskDefinition[]):
+  public loadDataWeek(taskWeek: TaskWeek, taskDayList: TaskDay[], taskDefinitionList: TaskDefinition[]):
     Promise < TaskActivity[] > {
     return new Promise<TaskActivity[]>((resolve, reject) => {
-      this.taskService.getOrCreateTaskActivityList(userIdentifier, taskWeekId)
+      this.taskService.getOrCreateTaskActivityList(taskWeek.userIdentifier, taskWeek.id)
         .then((taskActivityList: TaskActivity[]) => {
 
             this.setState(taskActivityList);

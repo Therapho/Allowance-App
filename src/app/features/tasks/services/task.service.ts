@@ -13,6 +13,34 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TaskService {
+  getTaskWeek(taskWeekId: number): Promise<TaskWeek> {
+    const parameters = new HttpParams().set('taskweekid', taskWeekId.toString());
+    const options = {params: parameters};
+
+    return new Promise<TaskWeek>((resolve, reject) => {
+      this.client.get<TaskWeek[]>(environment.dataApiUrl + '/taskweekset', options).toPromise()
+      .then(taskWeekList => {
+        if (taskWeekList.length === 0) {
+          resolve(null);
+        } else {
+          resolve(taskWeekList[0]);
+        }
+      })
+      .catch (error => reject(error));
+    });
+
+  }
+  getTaskWeeks(startDate: Date, endDate: Date) {
+    const parameters = new HttpParams().set('startdate', startDate.toISOString()).set('endDate', endDate.toISOString());
+    const options = {params: parameters};
+
+    return new Promise<TaskWeek[]>((resolve, reject) => {
+      this.client.get<TaskWeek[]>(environment.dataApiUrl + '/taskweekset', options).toPromise()
+      .then(taskWeekList => resolve(taskWeekList))
+      .catch(error => reject(error));
+    });
+
+  }
   getOrCreateTaskActivityList(userIdentifier: string, taskWeekId: number): Promise<TaskActivity[]> {
     const parameters = new HttpParams().set('taskweekid', taskWeekId.toString()).set('useridentifier', userIdentifier);
     const options = {params: parameters};

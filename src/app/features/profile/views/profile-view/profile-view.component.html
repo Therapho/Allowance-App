@@ -3,21 +3,21 @@
     <mat-card-title>Profile</mat-card-title>
   </mat-card-header>
 
-  <mat-card-content *ngIf="accountStore.state">
+  <mat-card-content *ngIf="accountStore.currentAccount">
     <div fxLayout='row' fxLayout.xs='column'>
       <div fxFlex='0 0 50%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>User</div>
-        <div fxFlex='0 0 50%'>{{accountStore.state.name}}</div>
+        <div fxFlex='0 0 50%'>{{accountStore.currentAccount.name}}</div>
       </div>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Role</div>
-        <div fxFlex='0 0 50%'>{{lookupStore.roles | lookupFilter: accountStore.state.roleId}}</div>
+        <div fxFlex='0 0 50%'>{{lookupStore.roles | lookupFilter: accountStore.currentAccount.roleId}}</div>
       </div>
     </div>
     <div fxLayout='row' fxLayout.xs='column'>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Balance</div>
-        <div fxFlex='0 0 50%'>{{accountStore.state.balance}}</div>
+        <div fxFlex='0 0 50%'>{{accountStore.currentAccount.balance}}</div>
       </div>
       <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
         <div fxFlex='0 0 50%' class='label'>Days Missed</div>

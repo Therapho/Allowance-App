@@ -18,7 +18,8 @@ export class TaskStore {
     private _taskWeekStore: TaskWeekStore,
     private _taskDayListStore: TaskDayListStore,
     private _taskActivityListStore: TaskActivityListStore,
-    private _taskDefinitionListStore: TaskDefinitionListStore
+    private _taskDefinitionListStore: TaskDefinitionListStore,
+
   ) { }
   private userIdentifier: string;
   private _selectedDate: Date;
@@ -36,31 +37,43 @@ export class TaskStore {
   get taskDefinitionList(): TaskDefinition[] {
     return this._taskDefinitionListStore.state;
   }
+
   /**
    * Loads the state's data if it isn't already loeaded for the specified parameters.
    * If the parameters match previous loads, nothing new is loaded
    * @param userIdentifier the user object id for the data required.
    * @param selectedDate the date to load the data for
    */
-  public async loadData(userIdentifier: string, selectedDate: Date) {
+  public async loadDataForTaskWeek(taskWeekId: number) {
+    return new Promise((resolve, reject) => {
+      this._taskWeekStore.loadDataForTaskWeek(taskWeekId)
+        .then(taskWeek => {
+          this._taskDayListStore.loadData(taskWeek)
+            .then(taskDayList => {
+              this._taskActivityListStore.loadDataWeek(taskWeek, taskDayList, this.taskDefinitionList)
+                .then(() => resolve());
+
+            });
+        });
+    });
+
+  }
+  public async loadDataForDate(userIdentifier: string, selectedDate: Date) {
     return new Promise((resolve, reject) => {
 
-      if (this.userIdentifier !== userIdentifier || this._selectedDate !== selectedDate) {
+
         this.userIdentifier = userIdentifier;
         this._selectedDate = selectedDate;
 
-        this._taskDefinitionListStore.loadData();
-        this._taskWeekStore.loadData(userIdentifier, selectedDate)
+        this._taskWeekStore.loadDataForDate(userIdentifier, selectedDate)
           .then(taskWeek => {
-            this._taskDayListStore.loadData(userIdentifier, taskWeek.id, selectedDate)
+            this._taskDayListStore.loadData(taskWeek)
               .then(taskDayList => {
-                  this._taskActivityListStore.loadDataWeek(userIdentifier, taskWeek.id, taskDayList, this.taskDefinitionList)
+                this._taskActivityListStore.loadDataWeek(taskWeek, taskDayList, this.taskDefinitionList)
                   .then(() => resolve());
 
               });
-          }
-          );
-      }
+          });
     });
 
   }
