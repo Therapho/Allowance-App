@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TaskService {
+
   getTaskWeek(taskWeekId: number): Promise<TaskWeek> {
     const parameters = new HttpParams().set('taskweekid', taskWeekId.toString());
     const options = {params: parameters};
@@ -131,8 +132,8 @@ export class TaskService {
         ),
       catchError(this.handleError)).toPromise();
   }
-  getTaskDayList(userIdentifier: string, taskWeekId: number): Promise<TaskDay[]> {
-    const options = {params: new HttpParams().set('useridentifier', userIdentifier).set('taskweekid', taskWeekId.toString()) };
+  getTaskDayList(taskWeekId: number): Promise<TaskDay[]> {
+    const options = {params: new HttpParams().set('taskweekid', taskWeekId.toString()) };
     return this.client.get<TaskDay[]>(environment.dataApiUrl + '/taskdayset', options).pipe(
       map((list: TaskDay[]) => list.map(data => {
         const taskDay: TaskDay = {
@@ -148,7 +149,10 @@ export class TaskService {
     return this.client.get<TaskDefinition[]>(environment.dataApiUrl + '/taskdefinitionset').pipe(
       catchError(this.handleError)).toPromise();
   }
+  public acceptTaskWeek(taskWeek: TaskWeek): Promise<any> {
+    return this.client.post(environment.dataApiUrl + '/accepttaskweek', taskWeek).toPromise();
 
+  }
 
   private handleError(err) {
     let errorMessage: string;

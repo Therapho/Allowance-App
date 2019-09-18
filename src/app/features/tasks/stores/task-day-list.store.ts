@@ -13,7 +13,7 @@ export class TaskDayListStore extends Store<TaskDay[]> {
   ): Promise<TaskDay[]> {
     return new Promise<TaskDay[]>((resolve, reject) => {
       this.taskService
-        .getTaskDayList(taskWeek.userIdentifier, taskWeek.id)
+        .getTaskDayList(taskWeek.id)
         .then(taskWeekList => {
             this.setState(taskWeekList);
             resolve(taskWeekList);

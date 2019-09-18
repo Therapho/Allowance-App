@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
 import { environment } from 'src/environments/environment';
+import { BusyService } from './core/services/busy-service/busy.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,7 +47,8 @@ import { environment } from 'src/environments/environment';
       multi: true
     },
     UserStore,
-    AccountStore
+    AccountStore,
+    BusyService
   ],
   bootstrap: [AppComponent]
 })

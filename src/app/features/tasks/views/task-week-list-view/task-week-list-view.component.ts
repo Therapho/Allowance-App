@@ -22,7 +22,7 @@ export class TaskWeekListViewComponent implements OnInit {
 
   ngOnInit() {
     if (!this.accountStore.isParent) {
-      this.router.navigate(['details']);
+      this.router.navigate(['tasks/details']);
     }
 
     this.selectedDate = DateUtilities.getMonday(new Date());

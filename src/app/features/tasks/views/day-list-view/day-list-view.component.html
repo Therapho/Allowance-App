@@ -1,6 +1,6 @@
 
-<mat-card class="header">
-  <mat-card-content *ngIf="taskStore.taskWeek">
+<mat-card ngClass="header" *ngIf="taskStore.taskWeek">
+  <mat-card-content >
     <div fxLayout="row" fxLayout.xs="column">
       <div
         fxFlex="0 0 50%"
@@ -50,10 +50,11 @@
   </mat-card-content>
 </mat-card>
 
-<app-task-list [taskActivityMatrixList]='taskActivityMatrixList'></app-task-list>
-<mat-card class='footer'>
+<app-task-list [taskActivityMatrixList]='taskActivityMatrixList' [canEdit]='canEdit' *ngIf='taskActivityMatrixList'></app-task-list>
+<mat-card ngClass='footer' *ngIf='taskActivityMatrixList'>
   <mat-card-content>
-    <button mat-raised-button (click)="save()" >Save</button>&nbsp;
-    <button mat-raised-button (click)="save()" >Cancel</button>
+    <button mat-raised-button (click)="save()" *ngIf='canSave'>Save</button>&nbsp;
+    <button mat-raised-button (click)="cancel()" >Cancel</button>&nbsp;
+    <button mat-raised-button (click)="accept()" *ngIf='canAccept'>Accept</button>
   </mat-card-content>
 </mat-card>

@@ -4,6 +4,7 @@ import { TaskService } from '../services/task.service';
 
 export class TaskWeekStore extends Store<TaskWeek> {
 
+
   constructor(private taskService: TaskService) {
     super(null);
   }
@@ -30,5 +31,9 @@ export class TaskWeekStore extends Store<TaskWeek> {
   }
   save(): Promise<any> {
     return this.taskService.putTaskWeek(this.state);
+  }
+
+  accept(): Promise<any> {
+    return this.taskService.acceptTaskWeek(this.state);
   }
 }

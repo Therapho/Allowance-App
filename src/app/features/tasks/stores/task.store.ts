@@ -14,6 +14,8 @@ import { TaskDefinition } from '../entities/task-definition';
 export class TaskStore {
 
 
+
+
   constructor(
     private _taskWeekStore: TaskWeekStore,
     private _taskDayListStore: TaskDayListStore,
@@ -80,7 +82,11 @@ export class TaskStore {
   saveTaskActivityList(): Promise<any> {
     return this._taskActivityListStore.save();
   }
+  acceptTaskWeek(): Promise<any> {
+    return this._taskWeekStore.accept();
+  }
   saveTaskWeek(): Promise<any> {
     return this._taskWeekStore.save();
   }
+
 }

@@ -11,7 +11,7 @@ import { Constants } from 'src/app/core/common/constants';
 })
 export class TaskCheckboxComponent implements OnInit {
   @Input() taskActivity: TaskActivity = null;
-  @Input() mode = '';
+  @Input() canEdit: boolean;
   @Output() statusChange: EventEmitter<TaskActivity> = new EventEmitter();
   @Output() clear: EventEmitter<TaskActivity> = new EventEmitter();
   public status = '';
@@ -32,6 +32,7 @@ export class TaskCheckboxComponent implements OnInit {
     }
   }
   onTap(event) {
+    if (!this.canEdit) {return; }
     let statusId = this.taskActivity.statusId;
 
     if (statusId === Constants.ActivityStatus.Incomplete || statusId === Constants.ActivityStatus.Blocked) {
@@ -46,6 +47,7 @@ export class TaskCheckboxComponent implements OnInit {
     this.statusChange.emit(this.taskActivity);
   }
   onPress(event) {
+    if (!this.canEdit) {return; }
     let statusId = this.taskActivity.statusId;
 
     if (statusId === Constants.ActivityStatus.Complete) {

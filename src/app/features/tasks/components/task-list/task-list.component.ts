@@ -11,6 +11,8 @@ import { TaskStore } from '../../stores/task.store';
 })
 export class TaskListComponent implements OnInit {
   @Input() taskActivityMatrixList: TaskActivityMatrix[];
+  @Input() canEdit: boolean;
+
   public displayedColumns: string[] = [
     'description',
     'monday',
@@ -26,6 +28,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit() {}
   public statusChange(taskActivity: TaskActivity) {
+    if (!this.canEdit) {return; }
     const taskDefinition = this.taskStore.taskDefinitionList.find(
       value => value.id === taskActivity.taskDefinitionId
     );
@@ -37,6 +40,7 @@ export class TaskListComponent implements OnInit {
     }
   }
   public clear(taskActivity: TaskActivity) {
+    if (!this.canEdit) {return; }
     const taskDefinition = this.taskStore.taskDefinitionList.find(
       value => value.id === taskActivity.taskDefinitionId
     );

@@ -15,6 +15,7 @@ import { TaskCheckboxComponent } from './components/task-checkbox/task-checkbox.
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskWeekListViewComponent } from './views/task-week-list-view/task-week-list-view.component';
 import { TaskWeekListStore } from './stores/task-week-list.store';
+import { LoadingComponent } from 'src/app/core/components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TaskWeekListStore } from './stores/task-week-list.store';
     DayListViewComponent,
     TaskCheckboxComponent,
     TaskListComponent,
-    TaskWeekListViewComponent
+    TaskWeekListViewComponent,
+    LoadingComponent
   ],
   imports: [CommonModule, TasksRoutingModule, SharedModule],
   providers: [

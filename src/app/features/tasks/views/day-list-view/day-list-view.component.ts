@@ -9,6 +9,7 @@ import { TaskActivityItem } from '../../entities/task-activity-item';
 import { Constants } from 'src/app/core/common/constants';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BusyService } from 'src/app/core/services/busy-service/busy.service';
 
 
 @Component({
@@ -24,38 +25,45 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     public taskStore: TaskStore,
     public lookUpStore: LookupStore,
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    public busy: BusyService
+  ) { }
   public selectedDate: Date;
 
   taskActivityMatrixList: TaskActivityMatrix[];
 
   ngOnInit() {
-    const taskWeekId = this.route.snapshot.paramMap.get('id');
-    this.loadData(taskWeekId);
+    // const taskWeekId = this.route.snapshot.paramMap.get('id');
+    // this.loadData(taskWeekId);
     this.routeSubscription = this.route.paramMap.subscribe(params => {
-     this.loadData(params.get('id'));
-   });
+      this.busy.setState(true);
+      this.loadData(params.get('id'))
+        .finally(() => this.busy.setState(false));
+    });
   }
-  loadData(taskWeekId) {
-    if (taskWeekId) {
-      this.taskStore.loadDataForTaskWeek(+taskWeekId).then(() => {
-        this.buildTaskActivityMatrix();
-      });
-    } else {
-      if (this.accountStore.isParent) {
-        return;
-      }
-      this.selectedDate = DateUtilities.getMonday(new Date());
-      this.taskStore
-        .loadDataForDate(
-          this.accountStore.currentAccount.userIdentifier,
-          this.selectedDate
-        )
-        .then(() => {
+  loadData(taskWeekId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      if (taskWeekId) {
+        this.taskStore.loadDataForTaskWeek(+taskWeekId).then(() => {
           this.buildTaskActivityMatrix();
-        });
-    }
+        }).catch(reason => reject(reason));
+      } else {
+        if (this.accountStore.isParent) {
+          reject('Parent\'s can\'t have their own task list.');
+        }
+        this.selectedDate = DateUtilities.getMonday(new Date());
+        this.taskStore
+          .loadDataForDate(
+            this.accountStore.currentAccount.userIdentifier,
+            this.selectedDate
+          )
+          .then(() => {
+            this.buildTaskActivityMatrix();
+            resolve();
+          }).catch(reason => reject(reason));
+      }
+    });
+
   }
   buildTaskActivityMatrix() {
     const taskActivityMatrixList: TaskActivityMatrix[] = [];
@@ -154,9 +162,37 @@ export class DayListViewComponent implements OnInit, OnDestroy {
 
     return value;
   }
+  get canEdit(): boolean {
+    return this.taskStore.taskWeek.statusId === Constants.Status.Open;
+  }
   save() {
-    this.taskStore.saveTaskActivityList();
-    this.taskStore.saveTaskWeek();
+    this.busy.setState(true);
+    this.taskStore.saveTaskActivityList().then(() =>
+      this.taskStore.saveTaskWeek().then(() => {
+        this.busy.setState(false);
+      })
+    );
+
+  }
+  get canSave(): boolean {
+    return this.taskStore.taskWeek.statusId === Constants.Status.Open;
+  }
+  cancel() {
+    this.router.navigate(['/']);
+  }
+  accept() {
+    this.busy.setState(true);
+    this.taskStore.taskWeek.statusId = Constants.Status.Approved;
+    this.taskStore.saveTaskActivityList().then(() =>
+      this.taskStore.acceptTaskWeek().then(() => {
+        this.busy.setState(false);
+        this.router.navigate(['']);
+      })
+    );
+
+  }
+  get canAccept(): boolean {
+    return this.taskStore.taskWeek.statusId === Constants.Status.Open && this.accountStore.isParent;
   }
   ngOnDestroy(): void {
     if (this.routeSubscription) {

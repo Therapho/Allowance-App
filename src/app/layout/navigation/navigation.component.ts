@@ -10,6 +10,7 @@ import { AccountStore } from 'src/app/core/stores/account.store';
 import { User } from 'msal';
 import { Account } from '../../core/entities/account';
 import { environment } from 'src/environments/environment';
+import { BusyService } from 'src/app/core/services/busy-service/busy.service';
 
 @Component({
   selector: 'app-navigation',
@@ -33,7 +34,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private broadcastService: BroadcastService,
     public userStore: UserStore,
     public accountStore: AccountStore,
-    private authService: MsalService) {
+    private authService: MsalService,
+    public busy: BusyService) {
     titleService.setTitle(this.title);
 
     const user = this.authService.getUser();
