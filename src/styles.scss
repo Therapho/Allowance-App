@@ -14,8 +14,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fieldsetxs{
   font-size:14px;
   margin:3px;
+  margin-bottom:15px;
+  text-align:center;
 }
 .label
 {
   font-weight: bold;
+}
+.mat-raised-button{
+  margin-top:-10px !important;
 }

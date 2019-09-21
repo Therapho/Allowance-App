@@ -7,9 +7,11 @@ import { LookupStore } from 'src/app/core/stores/lookup.store';
 import { TaskActivityMatrix } from '../../entities/task-activity-matrix';
 import { TaskActivityItem } from '../../entities/task-activity-item';
 import { Constants } from 'src/app/core/common/constants';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BusyService } from 'src/app/core/services/busy-service/busy.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -26,7 +28,8 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     public lookUpStore: LookupStore,
     private route: ActivatedRoute,
     private router: Router,
-    public busy: BusyService
+    public busy: BusyService,
+    private dialog: MatDialog
   ) { }
   public selectedDate: Date;
 
@@ -170,6 +173,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.taskStore.saveTaskActivityList().then(() =>
       this.taskStore.saveTaskWeek().then(() => {
         this.busy.setState(false);
+        this.router.navigate(['']);
       })
     );
 
@@ -181,19 +185,46 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
   accept() {
-    this.busy.setState(true);
-    this.taskStore.taskWeek.statusId = Constants.Status.Approved;
-    this.taskStore.saveTaskActivityList().then(() =>
-      this.taskStore.acceptTaskWeek().then(() => {
-        this.busy.setState(false);
-        this.router.navigate(['']);
-      })
-    );
+    this.confirm('This will finalize this week\'s tasks, and allowance, locking this list.  Are you sure?')
+      .then(response => {
+        if (response === true) {
+          this.busy.setState(true);
+          this.taskStore.taskWeek.statusId = Constants.Status.Approved;
+          this.taskStore.saveTaskActivityList().then(() =>
+            this.taskStore.acceptTaskWeek().then(() => {
+              this.busy.setState(false);
+              this.router.navigate(['']);
+            })
+          );
+        }
+      });
+
 
   }
   get canAccept(): boolean {
-    return this.taskStore.taskWeek.statusId === Constants.Status.Open && this.accountStore.isParent;
+    const endOfWeek = DateUtilities.addDays( this.taskStore.taskWeek.weekStartDate, 4);
+    const today = new Date();
+    const canAccept = this.taskStore.taskWeek.statusId === Constants.Status.Open && this.accountStore.isParent && today >= endOfWeek;
+
+    return canAccept;
   }
+  async confirm(message: string): Promise<boolean> {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+        message
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    let result = false;
+
+    await dialogRef.afterClosed().toPromise().then(response => result = response);
+    return result;
+}
+
   ngOnDestroy(): void {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe();

@@ -9,13 +9,16 @@ import {
   MatCardModule,
   MatExpansionModule,
   MatTableModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LookupFilterPipe } from '../core/pipes/lookup-filter.pipe';
 import { AccountFilterPipe } from '../core/pipes/account-filter.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [LookupFilterPipe, AccountFilterPipe],
@@ -29,11 +32,14 @@ import { AccountFilterPipe } from '../core/pipes/account-filter.pipe';
     MatCardModule,
     MatExpansionModule,
     FlexLayoutModule,
-    FormsModule,
+    ReactiveFormsModule,
     LayoutModule,
     MatCheckboxModule,
     MatTableModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   exports: [
     LayoutModule,
@@ -45,13 +51,16 @@ import { AccountFilterPipe } from '../core/pipes/account-filter.pipe';
     MatCardModule,
     MatExpansionModule,
     FlexLayoutModule,
-    FormsModule,
+    ReactiveFormsModule,
     LayoutModule,
     MatCheckboxModule,
     LookupFilterPipe,
     MatTableModule,
     MatSlideToggleModule,
-    AccountFilterPipe
+    MatDialogModule,
+    AccountFilterPipe,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class SharedModule {}

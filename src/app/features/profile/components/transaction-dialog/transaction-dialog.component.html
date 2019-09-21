@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Account {{category}}</h2>
+
+<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field>
+
+      <textarea matInput
+              placeholder="Description"
+             formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+            placeholder="Amount"
+           formControlName="amount"
+           type="number">
+  </mat-form-field>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="ok()">Ok</button>
+    <button class="mat-raised-button mat-primary"(click)="cancel()">Cancel</button>
+</mat-dialog-actions>

@@ -12,6 +12,12 @@ const routes: Routes = [
 
   },
   {
+    path: '',
+    loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
+    canActivate : [MsalGuard]
+
+  },
+  {
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.module').then(mod => mod.TasksModule),
     canActivate : [MsalGuard]

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { DataService } from '../services/data-service/data.service';
 import { Account } from '../entities/account';
 import { Constants } from '../common/constants';
+import { Transaction } from 'src/app/features/profile/types/transaction';
+import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class AccountStore {
 
@@ -20,7 +22,9 @@ export class AccountStore {
   get accountList(): Account[] {
     return this._accountListStore.state;
   }
-
+  get accountList$(): Observable<Account[]> {
+    return this._accountListStore.state$;
+  }
   public load(userIdentifier: string): Promise<Account> {
     return new Promise<Account>((resolve, reject) => {
       this.dataService.getAccountList().then(accountList => {
@@ -31,9 +35,15 @@ export class AccountStore {
     });
 
   }
+  public refreshAccountList() {
+    return this.dataService.getAccountList().then(accountList =>  this._accountListStore.setState(accountList));
+  }
   public getAccount(userIdentifier: string): Account {
     const account = this.accountList.find(a => a.userIdentifier === userIdentifier);
     return account;
+  }
+  public updateBalance(transaction: Transaction) {
+    return this.dataService.updateBalance(transaction);
   }
   public get isParent(): boolean {
     if (this._currentAccountStore.state == null || this._currentAccountStore.state.roleId !== Constants.Role.Parent) {

@@ -6,6 +6,7 @@ import { Account } from '../../entities/account';
 import { environment } from '../../../../environments/environment';
 import { Lookup } from '../../entities/lookup';
 import { MsalService } from '@azure/msal-angular';
+import { Transaction } from 'src/app/features/profile/types/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,9 @@ export class DataService {
       .then(accountList => resolve(accountList))
       .catch(error => reject(error));
     });
+  }
+  updateBalance(transaction: Transaction): Promise<any> {
+    return this.client.post(environment.dataApiUrl + '/updatebalance', transaction).toPromise();
   }
   public getTaskGroupList(): Promise < Lookup[] > {
     return new Promise<Lookup[]>((resolve, reject) => {

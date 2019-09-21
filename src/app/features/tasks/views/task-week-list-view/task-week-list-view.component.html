@@ -1,13 +1,32 @@
-<app-loading></app-loading>
-<mat-card>
-  <mat-card-content>
-    <mat-list *ngIf='taskWeekListStore.state'>
-      <mat-list-item *ngFor="let taskWeek of taskWeekListStore.state">
-        {{accountStore.accountList | accountFilter :  taskWeek.userIdentifier}} :
-         {{taskWeek.weekStartDate | date: "yyyy/MM/dd" }} :
-        {{lookupStore.status | lookupFilter: taskWeek.statusId}} &nbsp;
-        <a mat-flat [routerLink]='["details", taskWeek.id]'>View</a></mat-list-item>
-    </mat-list>
-  </mat-card-content>
-</mat-card>
+<mat-card class='profileCard'>
+  <mat-card-title>Task Lists</mat-card-title>
+    <mat-card-content>
 
+<div *ngIf='taskWeekListStore.state'>
+    <div *ngFor="let taskWeek of taskWeekListStore.state">
+      <mat-card>
+        <mat-card-content>
+            <div fxLayout='row' fxLayout.xs='column'>
+                <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+                  <div fxFlex='0 0 50%'><mat-icon>attach_money</mat-icon></div>
+                  <div fxFlex='0 0 50%'>{{accountStore.accountList | accountFilter :  taskWeek.userIdentifier}}</div>
+                </div>
+
+                <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+                  <div fxFlex='0 0 50%' class='label'>{{taskWeek.weekStartDate | date: "yyyy/MM/dd" }}</div>
+                  <div fxFlex='0 0 50%'>{{lookupStore.status | lookupFilter: taskWeek.statusId}}</div>
+                </div>
+
+                <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+                    <button mat-raised-button [routerLink]='["details", taskWeek.id]'>View</button>
+                </div>
+            </div>
+
+
+        </mat-card-content>
+      </mat-card>
+      <p></p>
+    </div>
+  </div>
+</mat-card-content>
+</mat-card>
