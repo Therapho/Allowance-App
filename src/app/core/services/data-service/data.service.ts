@@ -7,11 +7,14 @@ import { environment } from '../../../../environments/environment';
 import { Lookup } from '../../entities/lookup';
 import { MsalService } from '@azure/msal-angular';
 import { Transaction } from 'src/app/features/profile/types/transaction';
+import { TransactionLog } from 'src/app/features/profile/entities/transaction-log';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+
+
 
   constructor(private client: HttpClient, private authService: MsalService) {}
 
@@ -22,21 +25,16 @@ export class DataService {
 
     return new Promise<Account>((resolve, reject) => {
       this.client.get<Account[]>(environment.dataApiUrl + '/accountset' , options).toPromise()
-      .then(accountList => resolve(accountList[0]))
+      .then(accountList => resolve(Account.map(accountList[0])))
       .catch(error => reject(error));
     });
 
   }
   getAccountList(): Promise<Account[]> {
-    return new Promise<Account[]>((resolve, reject) => {
-      this.client.get<Account[]>(environment.dataApiUrl + '/accountset').pipe(
-        map((list: Account[]) => list.map(data => {
-          return Account.map(data);
-        }))
-      ).toPromise()
-      .then(accountList => resolve(accountList))
-      .catch(error => reject(error));
-    });
+    return this.client.get<Account[]>(environment.dataApiUrl + '/accountset')
+      .pipe(map((list: Account[]) => list.map(data => Account.map(data))))
+      .toPromise();
+
   }
   updateBalance(transaction: Transaction): Promise<any> {
     return this.client.post(environment.dataApiUrl + '/updatebalance', transaction).toPromise();
@@ -71,5 +69,17 @@ export class DataService {
       .then(lookup => resolve(lookup))
       .catch(error => reject(error));
     });
+  }
+  getTransactionCategoryList() {
+    return this.client.get<Lookup[]>(environment.dataApiUrl + '/lookups/transactioncategoryset').toPromise();
+  }
+
+  public getTransactionLogList(accountId: number): Promise<TransactionLog[]> {
+    const parameters = new HttpParams().set('accountid', accountId.toString());
+    const options = {params: parameters};
+
+    return this.client.get<TransactionLog[]>(environment.dataApiUrl + '/transactionlogset', options)
+      .pipe(map((list: TransactionLog[]) => list.map(data => TransactionLog.map(data))))
+      .toPromise();
   }
 }

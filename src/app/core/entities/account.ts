@@ -4,6 +4,7 @@ export class Account {
   name: string;
   balance: number;
   userIdentifier: string;
+  activeTaskWeekId?: number;
 
   static map(data: Account): Account {
     const account: Account = {
@@ -11,7 +12,8 @@ export class Account {
       name: data.name,
       balance: +data.balance,
       roleId: +data.roleId,
-      userIdentifier: data.userIdentifier
+      userIdentifier: data.userIdentifier,
+      activeTaskWeekId: +data.activeTaskWeekId
     };
     return account;
   }

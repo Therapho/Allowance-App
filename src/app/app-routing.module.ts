@@ -21,13 +21,7 @@ const routes: Routes = [
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.module').then(mod => mod.TasksModule),
     canActivate : [MsalGuard]
-  },
-  {
-    path: 'money',
-    loadChildren: () => import('./features/money/money.module').then(mod => mod.MoneyModule),
-    canActivate : [MsalGuard]
   }
-
 ];
 
 @NgModule({
@@ -39,8 +33,7 @@ export class AppRoutingModule {
 
     navigationService.left.addNav({module: 'app', nav: [
       { text: 'Profile', path: '/profile', icon: 'perm_identity'},
-      { text: 'Tasks', path: '/tasks', icon: 'done'},
-      { text: 'Money', path: '/money', icon: 'attach_money'}
+      { text: 'Tasks', path: '/tasks', icon: 'done'}
     ]});
     navigationService.left.setNav('app');
 

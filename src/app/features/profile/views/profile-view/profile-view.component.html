@@ -20,11 +20,16 @@
         <div fxFlex='0 0 50%'>{{accountStore.currentAccount.balance}}</div>
       </div>
 
+        <div fxFlex="0 0 50%" fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+          <div fxFlex='0 0 50%'><mat-icon>done</mat-icon></div>
+          <div fxFlex='0 0 50%'><button mat-raised-button [routerLink]='["/tasks"]'>Tasks</button></div>
+        </div>
+
     </div>
 
   </mat-card-content>
 </mat-card>
-<mat-card class='profileCard'>
+<mat-card class='profileCard' *ngIf='accountStore.isParent'>
   <mat-card-title>Children</mat-card-title>
   <mat-card-content>
     <app-child-list [childList]='childList' (updateBalance)='updateBalance($event)'></app-child-list>

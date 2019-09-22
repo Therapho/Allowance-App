@@ -7,6 +7,8 @@ import { Lookup } from '../entities/lookup';
   providedIn: 'root'
 })
 export class LookupStore {
+  _transactionCategories: Store<Lookup[]>;
+
 
   constructor(
     private dataService: DataService
@@ -15,6 +17,7 @@ export class LookupStore {
     this.loadStatus();
     this.loadTaskGroups();
     this.loadActivityStatus();
+    this.loadTransactionCategories();
   }
 
   get roles(): Lookup[] {
@@ -36,6 +39,10 @@ export class LookupStore {
 
     return this._taskGroups.state;
   }
+  get transactionLogCategories(): Lookup[] {
+    return this._transactionCategories.state;
+  }
+
   private _roles: Store<Lookup[]>;
   private _status: Store<Lookup[]>;
   private _taskGroups: Store<Lookup[]>;
@@ -83,6 +90,15 @@ export class LookupStore {
         });
 
   }
+  loadTransactionCategories() {
+    this._transactionCategories = new Store<Lookup[]>(null);
+    this.dataService.getTransactionCategoryList().then(
+        (data: Lookup[]) => {
+          this._transactionCategories.setState(data);
+
+        });
+  }
+
   getName(id: number, lookupName: string) {
 
     return this.findLookup(lookupName).find(item => item.id === id).name;

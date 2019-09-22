@@ -28,6 +28,7 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
     });
 
   }
+
   updateBalance(transaction: Transaction) {
 
     this.accountStore.updateBalance(transaction).then(() => {
@@ -39,4 +40,5 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
        this.accountListSubscription.unsubscribe();
      }
    }
+
 }

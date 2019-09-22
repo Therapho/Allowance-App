@@ -3,19 +3,23 @@
     <mat-card>
       <mat-card-content>
           <div fxLayout='row' fxLayout.xs='column'>
-              <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+              <div fxFlex='0 0 25%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
                 <div fxFlex='0 0 50%'><mat-icon>child_care</mat-icon></div>
                 <div fxFlex='0 0 50%'>{{ child.name }}</div>
               </div>
 
-              <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+              <div fxFlex='0 0 25%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
                 <div fxFlex='0 0 50%' class='label'>Balance:</div>
                 <div fxFlex='0 0 50%'>{{ child.balance }}</div>
               </div>
 
-              <div fxFlex='0 0 33%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+              <div fxFlex='0 0 25%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
                 <div fxFlex='0 0 50%'><button mat-raised-button (click)="deposit(child.id)">Deposit</button></div>
                 <div fxFlex='0 0 50%'><button mat-raised-button (click)="withdraw(child.id)">Withdraw</button></div>
+              </div>
+              <div fxFlex='0 0 25%' fxLayout='row' ngClass='fieldset' ngClass.xs='fieldsetxs'>
+                <div fxFlex='0 0 50%'><button mat-raised-button [routerLink]='["/tasks/details", child.activeTaskWeekId]'>Tasks</button></div>
+                <div fxFlex='0 0 50%'><button mat-raised-button [routerLink]='["log", child.id]'>Transactions</button></div>
               </div>
           </div>
 
