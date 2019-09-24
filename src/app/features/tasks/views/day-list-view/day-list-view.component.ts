@@ -173,7 +173,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.taskStore.saveTaskActivityList().then(() =>
       this.taskStore.saveTaskWeek().then(() => {
         this.busy.setState(false);
-        this.router.navigate(['']);
+        this.router.navigate(['/profile']);
       })
     );
 
@@ -182,7 +182,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     return this.taskStore.taskWeek.statusId === Constants.Status.Open;
   }
   cancel() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/profile']);
   }
   accept() {
     this.confirm('This will finalize this week\'s tasks, and allowance, locking this list.  Are you sure?')
@@ -193,7 +193,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
           this.taskStore.saveTaskActivityList().then(() =>
             this.taskStore.acceptTaskWeek().then(() => {
               this.busy.setState(false);
-              this.router.navigate(['']);
+              this.router.navigate(['/profile']);
             })
           );
         }

@@ -33,7 +33,6 @@ import { BusyService } from './core/services/busy-service/busy.service';
         clientID: environment.clientId,
         authority: environment.authority,
         cacheLocation: environment.cacheLocation,
-        redirectUri: environment.appPath,
         consentScopes: environment.contentScopes,
         validateAuthority: environment.validateAthority,
         protectedResourceMap: environment.protectedResourceMap as [string, string[]][]

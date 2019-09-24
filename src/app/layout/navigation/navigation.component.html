@@ -4,14 +4,14 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list  *ngIf="loggedIn">
+    <mat-nav-list  *ngIf="userStore.loggedIn$ | async">
         <a mat-list-item *ngFor='let link of navigationService.left.nav | async'
         [routerLink]='link.path' routerLinkActive="router-link-active"><mat-icon>{{link.icon}}</mat-icon> {{link.text}}</a>
     </mat-nav-list>
-    <mat-divider  *ngIf="loggedIn"></mat-divider>
+    <mat-divider  *ngIf="userStore.loggedIn$ | async"></mat-divider>
     <mat-nav-list>
-      <a mat-list-item *ngIf="!loggedIn"   (click)="onLogin()"><mat-icon>lock</mat-icon> Login</a>
-      <a mat-list-item *ngIf="loggedIn" (click)="onLogout()"><mat-icon>lock_open</mat-icon> Logout</a>
+      <a mat-list-item *ngIf="!(userStore.loggedIn$ | async)"   (click)="onLogin()"><mat-icon>lock</mat-icon> Login</a>
+      <a mat-list-item *ngIf="userStore.loggedIn$ | async" (click)="onLogout()"><mat-icon>lock_open</mat-icon> Logout</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -27,12 +27,12 @@
       <span><mat-icon>child_care</mat-icon> {{ title }}</span>
       <a *ngIf='userStore.state' mat-button class='right' [routerLink]='["/profile"]'>{{userStore.state.name}}</a>
     </mat-toolbar>
-    <mat-toolbar color="background"  *ngIf="loggedIn && navigationService.top.count | async">
+    <!-- <mat-toolbar color="background"  *ngIf="loggedIn$ | async && navigationService.top.count | async">
       <mat-nav-list class="horizontal">
         <a mat-list-item *ngFor='let link of navigationService.top.nav | async'
           [routerLink]='link.path' routerLinkActive="router-link-active"><mat-icon>{{link.icon}}</mat-icon> {{link.text}}</a>
       </mat-nav-list>
-    </mat-toolbar>
+    </mat-toolbar> -->
 
     <router-outlet *ngIf='accountStore.currentAccount'></router-outlet>
 

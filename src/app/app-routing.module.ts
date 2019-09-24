@@ -3,16 +3,16 @@ import { Routes, RouterModule, Router, NavigationEnd, NavigationStart, RouterEve
 import { MsalGuard } from '@azure/msal-angular';
 import { NavigationService } from './core/services/navigation-service/navigation.service';
 import { Profile } from 'selenium-webdriver/firefox';
+import { HomeComponent } from './layout/home/home.component';
 
 const routes: Routes = [
   {
-    path: 'profile',
-    loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
-    canActivate : [MsalGuard]
+    path: '',
+    component: HomeComponent
 
   },
   {
-    path: '',
+    path: 'profile',
     loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
     canActivate : [MsalGuard]
 

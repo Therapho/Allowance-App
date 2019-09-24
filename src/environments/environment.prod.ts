@@ -9,11 +9,12 @@ const graphScope = 'user.read';
 const graphUrl = 'https://graph.microsoft.com/v1.0/me';
 
 export const environment = {
-  production: false,
+  production: true,
   authority:
     'https://allowance.b2clogin.com/allowance.onmicrosoft.com/B2C_1_SignUpSignIn',
   dataApiUrl,
-  appPath: 'https://allowancestorage.z9.web.core.windows.net/',
+  appPath: 'https://allowance.rocchetti.ca/',
+  redirectUri: 'https://login.microsoftonline.com/tfp/oauth2/nativeclient',
   appTitle: 'Allowance',
   clientId: '45ef1ae1-c126-4314-b819-c6adb6c0fb42',
   cacheLocation: 'localStorage',

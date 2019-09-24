@@ -13,6 +13,7 @@ export const environment = {
     'https://allowance.b2clogin.com/allowance.onmicrosoft.com/B2C_1_SignUpSignIn',
   dataApiUrl,
   appPath: 'http://localhost:4200',
+  redirectUri: 'https://login.microsoftonline.com/tfp/oauth2/nativeclient',
   appTitle: 'Allowance - LOCAL',
   clientId: '45ef1ae1-c126-4314-b819-c6adb6c0fb42',
   cacheLocation: 'localStorage',
