@@ -5,7 +5,6 @@ import { catchError, map } from 'rxjs/operators';
 import { Account } from '../../entities/account';
 import { environment } from '../../../../environments/environment';
 import { Lookup } from '../../entities/lookup';
-import { MsalService } from '@azure/msal-angular';
 import { Transaction } from 'src/app/features/profile/types/transaction';
 import { TransactionLog } from 'src/app/features/profile/entities/transaction-log';
 
@@ -16,7 +15,7 @@ export class DataService {
 
 
 
-  constructor(private client: HttpClient, private authService: MsalService) {}
+  constructor(private client: HttpClient) {}
 
 
   public getAccount(userIdentifier: string): Promise<Account> {

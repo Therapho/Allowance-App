@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
@@ -17,6 +16,7 @@ import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
 import { environment } from 'src/environments/environment';
 import { BusyService } from './core/services/busy-service/busy.service';
+import { HttpInterceptorService } from './core/services/http-interceptor-service/http-interceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,27 +27,14 @@ import { BusyService } from './core/services/busy-service/busy.service';
     BrowserAnimationsModule,
     LayoutModule,
     AppRoutingModule,
-    HttpClientModule,
-    [
-      MsalModule.forRoot({
-        clientID: environment.clientId,
-        authority: environment.authority,
-        cacheLocation: environment.cacheLocation,
-        consentScopes: environment.contentScopes,
-        validateAuthority: environment.validateAthority,
-        protectedResourceMap: environment.protectedResourceMap as [string, string[]][]
-      })
-    ]
+    HttpClientModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
-    },
+
     UserStore,
     AccountStore,
-    BusyService
+    BusyService,
+    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

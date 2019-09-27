@@ -81,6 +81,30 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "hybrid": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hybrid.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -95,6 +119,9 @@
             },
             "local": {
               "browserTarget": "allowance-app:build:local"
+            },
+            "hybrid": {
+              "browserTarget": "allowance-app:build:hybrid"
             }
           }
         },

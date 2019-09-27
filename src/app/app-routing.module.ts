@@ -1,8 +1,6 @@
 import { NgModule, OnInit, OnDestroy } from '@angular/core';
 import { Routes, RouterModule, Router, NavigationEnd, NavigationStart, RouterEvent } from '@angular/router';
-import { MsalGuard } from '@azure/msal-angular';
 import { NavigationService } from './core/services/navigation-service/navigation.service';
-import { Profile } from 'selenium-webdriver/firefox';
 import { HomeComponent } from './layout/home/home.component';
 
 const routes: Routes = [
@@ -12,15 +10,20 @@ const routes: Routes = [
 
   },
   {
+    path: 'state',
+    component: HomeComponent
+
+  },
+  {
     path: 'profile',
     loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
-    canActivate : [MsalGuard]
+    // canActivate : [MsalGuard]
 
   },
   {
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.module').then(mod => mod.TasksModule),
-    canActivate : [MsalGuard]
+    // canActivate : [MsalGuard]
   }
 ];
 
@@ -37,10 +40,10 @@ export class AppRoutingModule {
     ]});
     navigationService.left.setNav('app');
 
-    router.events
-    .filter((event) => event instanceof NavigationEnd)
-    .subscribe(event => {
-      navigationEnded(navigationService, (event as NavigationEnd).url); });
+    // router.events
+    // .filter((event) => event instanceof NavigationEnd)
+    // .subscribe(event => {
+    //   navigationEnded(navigationService, (event as NavigationEnd).url); });
   }
 }
 function navigationEnded(navigationService: NavigationService, url: string) {

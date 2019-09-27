@@ -1,8 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-const apiScope =
-  'https://allowance.onmicrosoft.com/allowanceapi/user_impersonation';
+const apiScope = 'https://allowance.onmicrosoft.com/allowanceapi/user_impersonation';
 const dataApiUrl = 'https://allowance-functions.azurewebsites.net/api/';
 
 const graphScope = 'user.read';
@@ -14,12 +13,13 @@ export const environment = {
     'https://allowance.b2clogin.com/allowance.onmicrosoft.com/B2C_1_SignUpSignIn',
   dataApiUrl,
   appPath: 'http://localhost:4200',
+  redirectUri: 'https://login.microsoftonline.com/tfp/oauth2/nativeclient',
   appTitle: 'Allowance - HYBRID',
   clientId: '45ef1ae1-c126-4314-b819-c6adb6c0fb42',
   cacheLocation: 'localStorage',
   validateAthority: false,
   apiScope,
   contentScopes: [apiScope],
-  protectedResourceMap: [[dataApiUrl, [apiScope]]],
+  protectedResourceMap: new Map( [[dataApiUrl, [apiScope]]]),
   secureApi:  true
 };

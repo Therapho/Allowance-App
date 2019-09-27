@@ -1,82 +1,94 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, Observable, BehaviorSubject } from 'rxjs';
-import { UserStore } from '../../stores/user.store';
-import { AccountStore } from '../../stores/account.store';
-import { MsalService, BroadcastService } from '@azure/msal-angular';
-import { Router } from '@angular/router';
+import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
+
 import { environment } from 'src/environments/environment';
-import { User } from 'msal';
+import { User, UserAgentApplication } from 'msal';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService implements  OnDestroy {
+export class AuthenticationService  {
+
+
   loginFailSub: Subscription;
   loginSuccessSub: Subscription;
-  private loginResponse = new BehaviorSubject<User>(null);
-
-  private subscription: Subscription;
+  private loginResponse = new Subject<User>();
+  private agent: UserAgentApplication;
   public data: string;
-  constructor(
+  msalConfig: { auth: { clientId: string; authority: string; }; cache: { cacheLocation: string; storeAuthStateInCookie: boolean; }; };
 
-    private authService: MsalService,
-    private broadcastService: BroadcastService,
+  constructor(
 
   ) {
 
-    this.loginFailSub = this.broadcastService.subscribe(
-      'msal:loginFailure',
-      this.loginFail()
-    );
-    this.loginSuccessSub = this.broadcastService.subscribe(
-      'msal:loginSuccess',
-      this.loginSuccess()
-    );
+
+    const msalConfig = {
+      auth: {
+          clientId: environment.clientId,
+          authority: environment.authority
+      },
+      cache: {
+          cacheLocation: environment.cacheLocation,
+          storeAuthStateInCookie: true
+      }
+  };
+    this.agent = new UserAgentApplication(environment.clientId, environment.authority, null, {
+      validateAuthority: environment.validateAthority,
+      cacheLocation: environment.cacheLocation,
+      protectedResourceMap: environment.protectedResourceMap
+    });
 
 
   }
 
   public login(): Observable<User> {
-    this.authService.loginPopup();
+
+    this.agent.loginPopup(environment.contentScopes).then(idToken => {
+      this.loginSuccess(idToken);
+  }).catch(error => {
+      this.loginResponse.error(error);
+  });
     return this.loginResponse.asObservable();
   }
 
   public logout() {
-    this.authService.logout();
+    this.agent.logout();
     // this.router.navigate(['']);
   }
 
+  public getUser(): User {
+    const user = this.agent.getUser();
+    if (user) {
+      this.cacheAccessToken();
+    }
 
-  private loginFail() {
-    return payload => {
-      console.log('login failure ' + JSON.stringify(payload));
-    };
+    return user;
   }
+  private cacheAccessToken() {
 
-  private loginSuccess() {
-    return async payload => {
-      const user = this.authService.getUser();
-      this.loginResponse.next(user);
-      console.log('login success ' + JSON.stringify(payload));
-      this.authService
+      this.agent
       .acquireTokenSilent(environment.contentScopes)
-      .then(token => localStorage.setItem('access_token', token))
+      .then(accessToken => localStorage.setItem('accessToken', accessToken))
       .catch(reason =>
-        this.authService
+        this.agent
           .acquireTokenPopup(environment.contentScopes)
-          .then(token => localStorage.setItem('access_token', token))
+          .then(accessToken => localStorage.setItem('accessToken', accessToken))
       );
-    };
+
+  }
+  private loginSuccess(idToken) {
+      console.log('Login token received: ' + idToken);
+
+      const user = this.agent.getUser();
+      this.loginResponse.next(user);
+      this.cacheAccessToken();
+
+
+  }
+  getAuthToken(): string {
+    const token = localStorage.getItem('accessToken');
+    return token;
   }
 
 
-  ngOnDestroy() {
-    this.broadcastService.getMSALSubject().next(1);
-    if (this.loginFailSub) {
-      this.loginFailSub.unsubscribe();
-    }
-    if (this.loginSuccessSub) {
-      this.loginSuccessSub.unsubscribe();
-    }
-  }
 }

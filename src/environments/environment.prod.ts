@@ -21,7 +21,7 @@ export const environment = {
   validateAthority: false,
   apiScope,
   contentScopes: [apiScope],
-  protectedResourceMap: [[dataApiUrl, [apiScope]]],
+  protectedResourceMap: new Map( [[dataApiUrl, [apiScope]]]),
   secureApi:  true
 };
 

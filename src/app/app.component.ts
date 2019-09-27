@@ -2,10 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
-import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { User } from 'msal';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
 import { AuthenticationService } from './core/services/authentication-service/authentication.service';
 
 @Component({
@@ -22,7 +19,10 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-
+    const user = this.authenticationService.getUser();
+    if (user) {
+      this.setupLogin(user);
+    }
   }
   public onLogin() {
     this.loginSubscription = this.authenticationService.login().subscribe(user => {
