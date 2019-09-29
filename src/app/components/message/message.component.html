@@ -1,0 +1,5 @@
+<div *ngIf="messageService.maxType">
+  <button mat-button (click)="showDetails()">
+    <mat-icon [ngClass]="messageIcon">{{ messageIcon }}</mat-icon>
+  </button>
+</div>

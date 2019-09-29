@@ -1,8 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-const apiScope =
-  'https://allowance.onmicrosoft.com/allowanceapi/user_impersonation';
+const apiScope = 'https://allowance.onmicrosoft.com/allowanceapi/user_impersonation';
 const dataApiUrl = 'https://allowance-functions.azurewebsites.net/api/';
 
 const graphScope = 'user.read';
