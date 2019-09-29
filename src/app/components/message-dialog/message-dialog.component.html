@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Application Messages</h2>
+<mat-dialog-content>
+  <mat-accordion>
+    <mat-expansion-panel
+      *ngFor="let message of messageService.messageList; let i = index"    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <button matt-button-raised (click)="remove(i)">X</button>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ message.subject }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      {{ message.body }}
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="clear()">Clear</button>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+</mat-dialog-actions>

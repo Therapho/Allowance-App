@@ -113,6 +113,9 @@ export class LookupStore {
       case 'ActivityStatus':
         lookup = this.activityStatus;
         break;
+      case 'TransactionLogCategory':
+        lookup = this.transactionLogCategories;
+        break;
     }
     return lookup;
   }

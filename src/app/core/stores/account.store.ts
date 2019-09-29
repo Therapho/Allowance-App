@@ -4,7 +4,7 @@ import { DataService } from '../services/data-service/data.service';
 import { Account } from '../entities/account';
 import { Constants } from '../common/constants';
 import { Transaction } from 'src/app/features/profile/types/transaction';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {Observable } from 'rxjs';
 @Injectable()
 export class AccountStore {
 
@@ -31,7 +31,8 @@ export class AccountStore {
         this._accountListStore.setState(accountList);
         const account = this.getAccount(userIdentifier);
         this._currentAccountStore.setState(account);
-      });
+      })
+      .catch(error => reject(error));
     });
 
   }
@@ -40,6 +41,10 @@ export class AccountStore {
   }
   public getAccount(userIdentifier: string): Account {
     const account = this.accountList.find(a => a.userIdentifier === userIdentifier);
+    return account;
+  }
+  public getAccountById(id: number): Account {
+    const account = this.accountList.find(a => a.id === id);
     return account;
   }
   public updateBalance(transaction: Transaction) {

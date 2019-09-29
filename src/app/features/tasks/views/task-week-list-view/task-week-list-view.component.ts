@@ -4,6 +4,7 @@ import { DateUtilities } from 'src/app/core/utilities/dateUtilities';
 import { LookupStore } from 'src/app/core/stores/lookup.store';
 import { AccountStore } from 'src/app/core/stores/account.store';
 import { Router } from '@angular/router';
+import { MessageService } from 'src/app/core/services/message-service/message.service';
 
 @Component({
   selector: 'app-task-week-list-view',
@@ -17,7 +18,8 @@ export class TaskWeekListViewComponent implements OnInit {
     public taskWeekListStore: TaskWeekListStore,
     public lookupStore: LookupStore,
     public accountStore: AccountStore,
-    public router: Router
+    public router: Router,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -27,7 +29,10 @@ export class TaskWeekListViewComponent implements OnInit {
 
     this.selectedDate = DateUtilities.getMonday(new Date());
 
-    this.taskWeekListStore.loadData(this.selectedDate, DateUtilities.addDays(this.selectedDate, 30 ));
+    this.taskWeekListStore.loadData(this.selectedDate, DateUtilities.addDays(this.selectedDate, 30 ))
+    .catch(error => {
+      this.messageService.addError('Error loading data for task week list.', error.message);
+    });
   }
 
 }

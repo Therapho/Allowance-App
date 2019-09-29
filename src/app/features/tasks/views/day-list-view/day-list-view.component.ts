@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { BusyService } from 'src/app/core/services/busy-service/busy.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
+import { MessageService } from 'src/app/core/services/message-service/message.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     public busy: BusyService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private messageService: MessageService
   ) { }
   public selectedDate: Date;
 
@@ -41,6 +43,9 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.paramMap.subscribe(params => {
       this.busy.setState(true);
       this.loadData(params.get('id'))
+      .catch(error => {
+        this.messageService.addError('Error loading data for task list.', error.message);
+      })
         .finally(() => this.busy.setState(false));
     });
   }
@@ -174,9 +179,10 @@ export class DayListViewComponent implements OnInit, OnDestroy {
       this.taskStore.saveTaskWeek().then(() => {
         this.busy.setState(false);
         this.router.navigate(['/profile']);
-      })
-    );
-
+      }))
+      .catch(error => {
+        this.messageService.addError('Error saving task list data.', error.message);
+      });
   }
   get canSave(): boolean {
     return this.taskStore.taskWeek.statusId === Constants.Status.Open;

@@ -4,6 +4,7 @@ import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
 import { User } from 'msal';
 import { AuthenticationService } from './core/services/authentication-service/authentication.service';
+import { MessageService } from './core/services/message-service/message.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     public userStore: UserStore,
     public accountStore: AccountStore,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -38,7 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line: no-string-literal
     const userIdentifier = user.idToken['sub'];
     this.userStore.setState(user);
-    this.accountStore.load(userIdentifier);
+    this.accountStore.load(userIdentifier)
+      .catch(error => {
+        this.messageService.addError('Error retrieving account for logged in user.', error.message);
+      });
 
   }
   ngOnDestroy() {

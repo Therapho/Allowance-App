@@ -1,29 +1,29 @@
 import { NgModule, OnInit, OnDestroy } from '@angular/core';
-import { Routes, RouterModule, Router, NavigationEnd, NavigationStart, RouterEvent } from '@angular/router';
+import {
+  Routes,
+  RouterModule
+} from '@angular/router';
 import { NavigationService } from './core/services/navigation-service/navigation.service';
-import { HomeComponent } from './layout/home/home.component';
+import { HomeComponent } from './views/home/home.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent
-
   },
   {
     path: 'state',
     component: HomeComponent
-
   },
   {
     path: 'profile',
-    loadChildren: () => import('./features/profile/profile.module').then(mod => mod.ProfileModule),
-    // canActivate : [MsalGuard]
-
+    loadChildren: () =>
+      import('./features/profile/profile.module').then(mod => mod.ProfileModule)
   },
   {
     path: 'tasks',
-    loadChildren: () => import('./features/tasks/tasks.module').then(mod => mod.TasksModule),
-    // canActivate : [MsalGuard]
+    loadChildren: () =>
+      import('./features/tasks/tasks.module').then(mod => mod.TasksModule)
   }
 ];
 
@@ -32,22 +32,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
-  constructor(router: Router, private navigationService: NavigationService) {
-
-    navigationService.left.addNav({module: 'app', nav: [
-      { text: 'Profile', path: '/profile', icon: 'perm_identity'},
-      { text: 'Tasks', path: '/tasks', icon: 'done'}
-    ]});
-    navigationService.left.setNav('app');
-
-    // router.events
-    // .filter((event) => event instanceof NavigationEnd)
-    // .subscribe(event => {
-    //   navigationEnded(navigationService, (event as NavigationEnd).url); });
-  }
+  constructor() {}
 }
-function navigationEnded(navigationService: NavigationService, url: string) {
-  const module = url.split('/')[1];
-  navigationService.top.setNav(module);
-}
-

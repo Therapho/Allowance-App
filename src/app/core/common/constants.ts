@@ -11,4 +11,8 @@ export class Constants {
   public static get TransactionCategory() {
     return {Deposit: 1, Withdrawal: 2};
   }
+
+  public static get MessageType() {
+    return {None: 0, Information: 1, Warning: 2, Error: 3};
+  }
 }

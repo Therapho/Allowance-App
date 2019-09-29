@@ -57,12 +57,22 @@ export class AuthenticationService  {
   }
 
   public getUser(): User {
-    const user = this.agent.getUser();
-    if (user) {
+    let user = this.agent.getUser();
+    if (this.isValid(user)) {
+
       this.cacheAccessToken();
+    } else {
+      user = null;
     }
 
     return user;
+  }
+
+  isValid(user: User): boolean {
+    if (!user) {return false; }
+    // tslint:disable-next-line: no-string-literal
+    if (user.idToken['exp'] > Date.now()) { return false; }
+    return true;
   }
   private cacheAccessToken() {
 
