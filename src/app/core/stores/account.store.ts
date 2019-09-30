@@ -31,6 +31,7 @@ export class AccountStore {
         this._accountListStore.setState(accountList);
         const account = this.getAccount(userIdentifier);
         this._currentAccountStore.setState(account);
+        resolve(account);
       })
       .catch(error => reject(error));
     });

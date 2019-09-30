@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
@@ -18,6 +18,23 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { HomeComponent } from './views/home/home.component';
 import { MessageComponent } from './components/message/message.component';
 import { MessageDialogComponent } from './components/message-dialog/message-dialog.component';
+import {
+  HammerGestureConfig,
+  HAMMER_GESTURE_CONFIG
+} from '@angular/platform-browser';
+import * as Hammer from 'hammerjs';
+
+@Injectable()
+export class MyHammerConfig extends HammerGestureConfig {
+
+  buildHammer(element: HTMLElement) {
+    const mc = new Hammer(element, {
+      touchAction: 'pan-y'
+    });
+
+    return mc;
+  }
+}
 
 @NgModule({
   declarations: [AppComponent, NavigationComponent, HomeComponent, MessageComponent, MessageDialogComponent],
@@ -36,7 +53,8 @@ import { MessageDialogComponent } from './components/message-dialog/message-dial
     AccountStore,
     BusyService,
     MessageService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true},
+    { provide: HAMMER_GESTURE_CONFIG,      useClass: MyHammerConfig  }
   ],
   bootstrap: [AppComponent]
 })

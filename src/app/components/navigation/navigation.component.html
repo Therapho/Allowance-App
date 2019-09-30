@@ -26,7 +26,7 @@
       </button>
       <span><mat-icon>child_care</mat-icon> {{ title }}</span>
       <div class='right'>
-        <a *ngIf='userStore.state' mat-button [routerLink]='["/profile"]'>{{userStore.state.name}}</a>
+        <a *ngIf='accountStore.currentAccount' mat-button [routerLink]='["/profile"]'>{{accountStore.currentAccount.name}}</a>
         <app-message class='float'></app-message>
       </div>
     </mat-toolbar>

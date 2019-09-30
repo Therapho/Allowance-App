@@ -10,10 +10,10 @@
       ngClass='taskList' ngClass.xs='taskList.xs'
     >
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef style="text-align: left;" >
+        <th mat-header-cell *matHeaderCellDef style="text-align: left;">
 
         </th>
-        <td mat-cell *matCellDef="let element" ngClass.xs='mat-column-description.xs'>{{ element.description }}</td>
+        <td mat-cell *matCellDef="let element" ngClass='mat-column-description' ngClass.xs='mat-column-description.xs'>{{ element.description }}</td>
       </ng-container>
 
       <ng-container matColumnDef="monday">

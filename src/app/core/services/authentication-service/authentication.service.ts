@@ -7,7 +7,7 @@ import { User, UserAgentApplication } from 'msal';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService  {
+export class AuthenticationService {
 
 
   loginFailSub: Subscription;
@@ -24,30 +24,31 @@ export class AuthenticationService  {
 
     const msalConfig = {
       auth: {
-          clientId: environment.clientId,
-          authority: environment.authority
+        clientId: environment.clientId,
+        authority: environment.authority
       },
       cache: {
-          cacheLocation: environment.cacheLocation,
-          storeAuthStateInCookie: true
+        cacheLocation: environment.cacheLocation,
+        storeAuthStateInCookie: true
       }
-  };
+    };
     this.agent = new UserAgentApplication(environment.clientId, environment.authority, null, {
       validateAuthority: environment.validateAthority,
       cacheLocation: environment.cacheLocation,
       protectedResourceMap: environment.protectedResourceMap
     });
-
-
   }
 
   public login(): Observable<User> {
 
-    this.agent.loginPopup(environment.contentScopes).then(idToken => {
-      this.loginSuccess(idToken);
-  }).catch(error => {
+    this.agent.loginPopup(environment.contentScopes).then(() => {
+      this.getAccessToken().then(() => {
+        const user = this.agent.getUser();
+        this.loginResponse.next(user);
+      });
+    }).catch(error => {
       this.loginResponse.error(error);
-  });
+    });
     return this.loginResponse.asObservable();
   }
 
@@ -58,10 +59,7 @@ export class AuthenticationService  {
 
   public getUser(): User {
     let user = this.agent.getUser();
-    if (this.isValid(user)) {
-
-      this.cacheAccessToken();
-    } else {
+    if (!this.isValid(user)) {
       user = null;
     }
 
@@ -69,36 +67,17 @@ export class AuthenticationService  {
   }
 
   isValid(user: User): boolean {
-    if (!user) {return false; }
+    if (!user) { return false; }
     // tslint:disable-next-line: no-string-literal
     if (user.idToken['exp'] > Date.now()) { return false; }
     return true;
   }
-  private cacheAccessToken() {
-
-      this.agent
+  public getAccessToken(): Promise<any> {
+    return this.agent
       .acquireTokenSilent(environment.contentScopes)
-      .then(accessToken => localStorage.setItem('accessToken', accessToken))
       .catch(reason =>
         this.agent
           .acquireTokenPopup(environment.contentScopes)
-          .then(accessToken => localStorage.setItem('accessToken', accessToken))
       );
-
   }
-  private loginSuccess(idToken) {
-      console.log('Login token received: ' + idToken);
-
-      const user = this.agent.getUser();
-      this.loginResponse.next(user);
-      this.cacheAccessToken();
-
-
-  }
-  getAuthToken(): string {
-    const token = localStorage.getItem('accessToken');
-    return token;
-  }
-
-
 }

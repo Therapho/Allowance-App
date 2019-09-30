@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
   public onLogout() {
+    localStorage.clear();
     this.authenticationService.logout();
   }
 

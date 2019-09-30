@@ -43,9 +43,9 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.paramMap.subscribe(params => {
       this.busy.setState(true);
       this.loadData(params.get('id'))
-      .catch(error => {
-        this.messageService.addError('Error loading data for task list.', error.message);
-      })
+        .catch(error => {
+          this.messageService.addError('Error loading data for task list.', error.message);
+        })
         .finally(() => this.busy.setState(false));
     });
   }
@@ -175,12 +175,15 @@ export class DayListViewComponent implements OnInit, OnDestroy {
   }
   save() {
     this.busy.setState(true);
-    this.taskStore.saveTaskActivityList().then(() =>
-      this.taskStore.saveTaskWeek().then(() => {
-        this.busy.setState(false);
-        this.router.navigate(['/profile']);
-      }))
-      .catch(error => {
+    this.taskStore.saveTaskActivityList()
+      .then(() => {
+
+        this.taskStore.saveTaskWeek().then(() => {
+          this.busy.setState(false);
+          this.messageService.addInfo('Tasks saved.', 'Tasks for the week have been successfully saved.');
+          this.router.navigate(['/profile']);
+        });
+      }).catch(error => {
         this.messageService.addError('Error saving task list data.', error.message);
       });
   }
@@ -208,7 +211,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
 
   }
   get canAccept(): boolean {
-    const endOfWeek = DateUtilities.addDays( this.taskStore.taskWeek.weekStartDate, 4);
+    const endOfWeek = DateUtilities.addDays(this.taskStore.taskWeek.weekStartDate, 4);
     const today = new Date();
     const canAccept = this.taskStore.taskWeek.statusId === Constants.Status.Open && this.accountStore.isParent && today >= endOfWeek;
 
@@ -221,7 +224,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     dialogConfig.autoFocus = true;
 
     dialogConfig.data = {
-        message
+      message
     };
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
@@ -229,7 +232,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
 
     await dialogRef.afterClosed().toPromise().then(response => result = response);
     return result;
-}
+  }
 
   ngOnDestroy(): void {
     if (this.routeSubscription) {

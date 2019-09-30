@@ -1,60 +1,40 @@
-
 <mat-card ngClass="header" *ngIf="taskStore.taskWeek">
-  <mat-card-content >
+  <mat-card-content>
     <div fxLayout="row" fxLayout.xs="column">
-      <div
-        fxFlex="0 0 50%"
-        fxLayout="row"
-        ngClass="fieldset"
-        ngClass.xs="fieldsetxs"
-      >
+      <div fxFlex="0 0 50%" fxLayout="row" ngClass="fieldset" ngClass.xs="fieldsetxs">
         <div fxFlex="0 0 50%" class="label">Start Date</div>
         <div fxFlex="0 0 50%">
           {{ taskStore.taskWeek.weekStartDate | date: "yyyy/MM/dd" }}
         </div>
       </div>
-      <div
-        fxFlex="0 0 50%"
-        fxLayout="row"
-        ngClass="fieldset"
-        ngClass.xs="fieldsetxs"
-      >
+      <div fxFlex="0 0 50%" fxLayout="row" ngClass="fieldset" ngClass.xs="fieldsetxs">
         <div fxFlex="0 0 50%" class="label">Account</div>
         <div fxFlex="0 0 50%">{{accountStore.accountList | accountFilter :  taskStore.taskWeek.userIdentifier}}</div>
       </div>
     </div>
     <div fxLayout="row" fxLayout.xs="column">
 
-      <div
-        fxFlex="0 0 50%"
-        fxLayout="row"
-        ngClass="fieldset"
-        ngClass.xs="fieldsetxs"
-      >
+      <div fxFlex="0 0 50%" fxLayout="row" ngClass="fieldset" ngClass.xs="fieldsetxs">
         <div fxFlex="0 0 50%" class="label">Status</div>
         <div fxFlex="0 0 50%">
           {{ lookUpStore.status | lookupFilter: taskStore.taskWeek.statusId }}
         </div>
       </div>
-      <div
-      fxFlex="0 0 50%"
-      fxLayout="row"
-      ngClass="fieldset"
-      ngClass.xs="fieldsetxs"
-    >
-      <div fxFlex="0 0 50%" class="label">Value</div>
-      <div fxFlex="0 0 50%">{{ taskStore.taskWeek.value | currency }}</div>
-    </div>
+      <div fxFlex="0 0 50%" fxLayout="row" ngClass="fieldset" ngClass.xs="fieldsetxs">
+        <div fxFlex="0 0 50%" class="label">Value</div>
+        <div fxFlex="0 0 50%">{{ taskStore.taskWeek.value | currency }}</div>
+      </div>
     </div>
 
   </mat-card-content>
 </mat-card>
 
-<app-task-list [taskActivityMatrixList]='taskActivityMatrixList' [canEdit]='canEdit' *ngIf='taskActivityMatrixList'></app-task-list>
+<app-task-list [taskActivityMatrixList]='taskActivityMatrixList' [canEdit]='canEdit' *ngIf='taskActivityMatrixList'>
+</app-task-list>
 <mat-card ngClass='footer' *ngIf='taskActivityMatrixList'>
   <mat-card-content>
     <button mat-raised-button (click)="save()" *ngIf='canSave'>Save</button>&nbsp;
-    <button mat-raised-button (click)="cancel()" >Cancel</button>&nbsp;
+    <button mat-raised-button (click)="cancel()">Cancel</button>&nbsp;
     <button mat-raised-button (click)="accept()" *ngIf='canAccept'>Accept</button>
   </mat-card-content>
 </mat-card>
