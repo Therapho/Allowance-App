@@ -16,6 +16,10 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: 'error',
+    component: HomeComponent
+  },
+  {
     path: 'profile',
     loadChildren: () =>
       import('./features/profile/profile.module').then(mod => mod.ProfileModule)

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { BusyService } from 'src/app/core/services/busy-service/busy.service';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
@@ -8,8 +7,9 @@ import { BusyService } from 'src/app/core/services/busy-service/busy.service';
 })
 export class LoadingComponent implements OnInit {
 
+
   constructor(
-    public busy: BusyService
+
   ) { }
 
   ngOnInit() {

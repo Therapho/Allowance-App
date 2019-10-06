@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/shared.module';
     ConfirmationDialogComponent
   ],
   imports: [CommonModule, MatDialogModule, SharedModule],
+
   entryComponents: [ConfirmationDialogComponent]
 })
 export class CoreModule {}

@@ -22,7 +22,7 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
     public userStore: UserStore,
     public accountStore: AccountStore,
     public lookupStore: LookupStore,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnInit() {

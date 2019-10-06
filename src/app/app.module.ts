@@ -23,6 +23,7 @@ import {
   HAMMER_GESTURE_CONFIG
 } from '@angular/platform-browser';
 import * as Hammer from 'hammerjs';
+import { LoadingComponent } from './core/components/loading/loading.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {

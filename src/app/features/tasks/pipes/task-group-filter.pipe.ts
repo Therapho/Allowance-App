@@ -8,6 +8,7 @@ import { TaskGroup } from 'src/app/core/entities/task-group';
 export class TaskGroupFilterPipe implements PipeTransform {
 
   transform(items: TaskDefinition[], filter: TaskGroup): TaskDefinition[] {
+    if (items == null || filter == null) { return null; }
     const results = items.filter(item => item.taskGroupId === filter.id);
     return results;
   }

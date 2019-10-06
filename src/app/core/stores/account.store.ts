@@ -27,7 +27,8 @@ export class AccountStore {
   }
   public load(userIdentifier: string): Promise<Account> {
     return new Promise<Account>((resolve, reject) => {
-      this.dataService.getAccountList().then(accountList => {
+      this.dataService.getAccountList()
+      .then(accountList => {
         this._accountListStore.setState(accountList);
         const account = this.getAccount(userIdentifier);
         this._currentAccountStore.setState(account);

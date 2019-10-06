@@ -21,15 +21,17 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loginSubscription = this.authenticationService.loginResponse$.subscribe(u => {
+      this.setupLogin(u);
+    });
+
     const user = this.authenticationService.getUser();
     if (user) {
       this.setupLogin(user);
     }
   }
   public onLogin() {
-    this.loginSubscription = this.authenticationService.login().subscribe(user => {
-      this.setupLogin(user);
-    });
+     this.authenticationService.login();
   }
   public onLogout() {
     localStorage.clear();
@@ -37,11 +39,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private async setupLogin(user: User) {
-
+    if (user == null) {
+      this.userStore.setState(null);
+      this.authenticationService.logout();
+      return;
+    }
     // tslint:disable-next-line: no-string-literal
     const userIdentifier = user.idToken['sub'];
     this.userStore.setState(user);
     this.accountStore.load(userIdentifier)
+      .then()
       .catch(error => {
         this.messageService.addError('Error retrieving account for logged in user.', error.message);
       });
