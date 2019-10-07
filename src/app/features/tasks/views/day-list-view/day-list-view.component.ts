@@ -78,7 +78,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     });
 
   }
-  buildTaskActivityMatrix() {
+  async buildTaskActivityMatrix() {
     const taskActivityMatrixList: TaskActivityMatrix[] = [];
     const taskActivityList = this.taskStore.taskActivityList;
     let value = 0;

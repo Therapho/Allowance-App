@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { DataService } from '../services/data-service/data.service';
 import { Store } from '../types/store';
 import { Lookup } from '../entities/lookup';
+import { promise } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LookupStore {
-  _transactionCategories: Store<Lookup[]>;
+
 
 
   constructor(
@@ -17,104 +18,127 @@ export class LookupStore {
     this.loadStatus();
     this.loadTaskGroups();
     this.loadActivityStatus();
-    this.loadTransactionCategories();
-  }
+    this.loadTransactionLogCategories();
 
+  }
   get roles(): Lookup[] {
-
-    return this._roles.state;
+    return this._roles;
   }
-
   get status(): Lookup[] {
-
-    return this._status.state;
+    return this._status;
   }
-
-  get activityStatus(): Lookup[] {
-
-    return this._activityStatus.state;
-  }
-
   get taskGroups(): Lookup[] {
-
-    return this._taskGroups.state;
+    return this._taskGroups;
+  }
+  get activityStatus(): Lookup[] {
+    return this._activityStatus;
   }
   get transactionLogCategories(): Lookup[] {
-    return this._transactionCategories.state;
+    return this._transactionLogCategories;
   }
 
-  private _roles: Store<Lookup[]>;
-  private _status: Store<Lookup[]>;
-  private _taskGroups: Store<Lookup[]>;
-  private _activityStatus: Store<Lookup[]>;
+  private _roles: Lookup[];
+  private _status: Lookup[];
+  private _taskGroups: Lookup[];
+  private _activityStatus: Lookup[];
+  private _transactionLogCategories: Lookup[];
+
+  private loadTransactionLogCategories() {
 
 
-  loadRoles() {
-    this._roles = new Store<Lookup[]>(null);
+        const roleString = localStorage.getItem('transactionLogCategories');
+        if (roleString) {
+          this._transactionLogCategories = JSON.parse(roleString);
 
-    this.dataService.getRoleList().then(
-      (data: Lookup[]) => {
-        this._roles.setState(data);
+        } else {
+          this.dataService.getTransactionCategoryList().then(transactionLogCategories => {
+            localStorage.setItem('transactionCategories', JSON.stringify(transactionLogCategories));
+            this._transactionLogCategories = transactionLogCategories;
+
+          });
+        }
+      }
+
+
+
+  private loadActivityStatus() {
+
+
+    const roleString = localStorage.getItem('activityStatus');
+    if (roleString) {
+      this._activityStatus = JSON.parse(roleString);
+
+    } else {
+      this.dataService.getActivityStatusList().then(activityStatus => {
+        localStorage.setItem('activityStatus', JSON.stringify(activityStatus));
+        this._activityStatus = activityStatus;
       });
+    }
+  }
+  private loadTaskGroups() {
+
+
+    const roleString = localStorage.getItem('taskGroups');
+    if (roleString) {
+      this._taskGroups = JSON.parse(roleString);
+
+    } else {
+      this.dataService.getTaskGroupList().then(taskGroups => {
+        localStorage.setItem('taskGroups', JSON.stringify(taskGroups));
+        this._taskGroups = taskGroups;
+      });
+    }
+  }
+  private loadStatus() {
+
+
+    const roleString = localStorage.getItem('status');
+    if (roleString) {
+      this._status = JSON.parse(roleString);
+
+    } else {
+      this.dataService.getStatusList().then(status => {
+        localStorage.setItem('status', JSON.stringify(status));
+        this._status = status;
+      });
+    }
   }
 
-  loadStatus() {
-    this._status = new Store<Lookup[]>(null);
+  private loadRoles() {
 
-    this.dataService.getStatusList().then(
-        (data: Lookup[]) => {
-          this._status.setState(data);
 
-        });
+    const roleString = localStorage.getItem('roles');
+    if (roleString) {
+      this._roles = JSON.parse(roleString);
 
-  }
-
-  loadActivityStatus() {
-    this._activityStatus = new Store<Lookup[]>(null);
-
-    this.dataService.getActivityStatusList().then(
-        (data: Lookup[]) => {
-          this._activityStatus.setState(data);
-
-        });
-
+    } else {
+      this.dataService.getRoleList().then(roles => {
+        localStorage.setItem('roles', JSON.stringify(roles));
+        this._roles = roles;
+      });
+    }
   }
 
 
-  loadTaskGroups() {
-    this._taskGroups = new Store<Lookup[]>(null);
-    this.dataService.getTaskGroupList().then(
-        (data: Lookup[]) => {
-          this._taskGroups.setState(data);
 
-        });
-
-  }
-  loadTransactionCategories() {
-    this._transactionCategories = new Store<Lookup[]>(null);
-    this.dataService.getTransactionCategoryList().then(
-        (data: Lookup[]) => {
-          this._transactionCategories.setState(data);
-
-        });
-  }
 
   getName(id: number, lookupName: string) {
-
-    return this.findLookup(lookupName).find(item => item.id === id).name;
+    const lookup = this.findLookup(lookupName);
+    return lookup.find(item => item.id === id).name;
   }
-  getId(name: string, lookupName: string) {
-    return this.findLookup(lookupName).find(item => item.name === name).id;
+  async getId(name: string, lookupName: string) {
+    const lookup = await this.findLookup(lookupName);
+    return lookup.find(item => item.name === name).id;
   }
-  private findLookup(lookupName: string) {
+  private findLookup(lookupName: string): Lookup[] {
     let lookup: Lookup[] = null;
     switch (lookupName) {
 
       case 'ActivityStatus':
-        lookup = this.activityStatus;
+        lookup = this._activityStatus;
         break;
       case 'TransactionLogCategory':
-        lookup = this.transactionLogCategories;
+        lookup = this._transactionLogCategories;
         break;
     }
     return lookup;
