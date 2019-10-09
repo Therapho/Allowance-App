@@ -6,7 +6,6 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { TaskDefinition } from '../entities/task-definition';
 import { TaskActivity } from '../entities/task-activity';
-import { TaskDay } from '../entities/task-day';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -106,24 +105,6 @@ export class TaskService {
     return this.client
       .put(environment.dataApiUrl + '/taskweekset/' + id, taskWeek)
       .pipe(map(returnId => +returnId))
-      .toPromise();
-  }
-  putTaskDay(taskDay: TaskDay): Promise<number> {
-    const id = taskDay.id ? taskDay.id.toString() : '';
-
-    return this.client
-      .put(environment.dataApiUrl + '/taskdayset/' + id, taskDay)
-      .pipe(map(returnId => +returnId))
-      .toPromise();
-  }
-
-  getTaskDayList(taskWeekId: number): Promise<TaskDay[]> {
-    const options = {
-      params: new HttpParams().set('taskweekid', taskWeekId.toString())
-    };
-    return this.client
-      .get<TaskDay[]>(environment.dataApiUrl + '/taskdayset', options)
-      .pipe(map((list: TaskDay[]) => list.map(data => TaskDay.map(data))))
       .toPromise();
   }
 

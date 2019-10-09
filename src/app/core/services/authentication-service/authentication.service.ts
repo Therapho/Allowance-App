@@ -23,17 +23,6 @@ export class AuthenticationService {
     private router: Router
   ) {
 
-
-    const msalConfig = {
-      auth: {
-        clientId: environment.clientId,
-        authority: environment.authority
-      },
-      cache: {
-        cacheLocation: environment.cacheLocation,
-        storeAuthStateInCookie: true
-      }
-    };
     this.agent = new UserAgentApplication(environment.clientId, environment.authority, null, {
       validateAuthority: environment.validateAthority,
       cacheLocation: environment.cacheLocation,

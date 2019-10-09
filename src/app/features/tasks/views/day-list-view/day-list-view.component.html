@@ -29,9 +29,9 @@
   </mat-card-content>
 </mat-card>
 
-<app-task-list [taskActivityMatrixList]='taskActivityMatrixList' [canEdit]='canEdit' *ngIf='taskActivityMatrixList'>
+<app-task-list [taskActivityList]='taskStore.taskActivityList' [canEdit]='canEdit' *ngIf='taskStore.taskActivityList'>
 </app-task-list>
-<mat-card ngClass='footer' *ngIf='taskActivityMatrixList'>
+<mat-card ngClass='footer' *ngIf='taskStore.taskActivityList'>
   <mat-card-content>
     <button mat-raised-button (click)="save()" *ngIf='canSave'>Save</button>&nbsp;
     <button mat-raised-button (click)="cancel()">Cancel</button>&nbsp;

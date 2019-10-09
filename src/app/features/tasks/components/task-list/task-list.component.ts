@@ -3,6 +3,8 @@ import { TaskActivityMatrix } from '../../entities/task-activity-matrix';
 import { Constants } from 'src/app/core/common/constants';
 import { TaskActivity } from '../../entities/task-activity';
 import { TaskStore } from '../../stores/task.store';
+import { TaskActivityItem } from '../../entities/task-activity-item';
+import { LookupStore } from 'src/app/core/stores/lookup.store';
 
 @Component({
   selector: 'app-task-list',
@@ -10,7 +12,7 @@ import { TaskStore } from '../../stores/task.store';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  @Input() taskActivityMatrixList: TaskActivityMatrix[];
+  @Input() taskActivityList: TaskActivity[];
   @Input() canEdit: boolean;
 
   public displayedColumns: string[] = [
@@ -24,25 +26,25 @@ export class TaskListComponent implements OnInit {
     'sunday'
   ];
 
-  constructor(private taskStore: TaskStore) {}
+  constructor(public taskStore: TaskStore, public lookupStore: LookupStore) {}
 
   ngOnInit() {}
-  public statusChange(taskActivity: TaskActivity) {
+  public statusChange(taskActivityItem: TaskActivityItem) {
     if (!this.canEdit) {return; }
     const taskDefinition = this.taskStore.taskDefinitionList.find(
-      value => value.id === taskActivity.taskDefinitionId
+      value => value.id === taskActivityItem.taskActivity.taskDefinitionId
     );
 
-    if (taskActivity.statusId === Constants.ActivityStatus.Complete) {
+    if (taskActivityItem.statusId === Constants.ActivityStatus.Complete) {
       this.taskStore.taskWeek.value += taskDefinition.value;
     } else {
       this.taskStore.taskWeek.value -= taskDefinition.value;
     }
   }
-  public clear(taskActivity: TaskActivity) {
+  public clear(taskActivityItem: TaskActivityItem) {
     if (!this.canEdit) {return; }
     const taskDefinition = this.taskStore.taskDefinitionList.find(
-      value => value.id === taskActivity.taskDefinitionId
+      value => value.id === taskActivityItem.taskActivity.taskDefinitionId
     );
 
     this.taskStore.taskWeek.value -= taskDefinition.value;

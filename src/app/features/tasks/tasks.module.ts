@@ -6,7 +6,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { TaskCardComponent } from './components/task-card/task-card.component';
 import { TaskGroupFilterPipe } from './pipes/task-group-filter.pipe';
 import { DayListViewComponent } from './views/day-list-view/day-list-view.component';
-import { TaskDayListStore } from './stores/task-day-list.store';
 import { TaskWeekStore } from './stores/task-week.store';
 import { TaskDefinitionListStore } from './stores/task-definition-list.store';
 import { TaskActivityListStore } from './stores/task-activity-list.store';
@@ -16,11 +15,15 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskWeekListViewComponent } from './views/task-week-list-view/task-week-list-view.component';
 import { TaskWeekListStore } from './stores/task-week-list.store';
 import { LoadingComponent } from 'src/app/core/components/loading/loading.component';
+import { TaskActivityItemPipe } from './pipes/task-activity-item.pipe';
+import { TaskDefinitionFilterPipe } from './pipes/task-definition-filter.pipe';
 
 @NgModule({
   declarations: [
     TaskCardComponent,
     TaskGroupFilterPipe,
+    TaskActivityItemPipe,
+    TaskDefinitionFilterPipe,
     DayListViewComponent,
     TaskCheckboxComponent,
     TaskListComponent,
@@ -30,7 +33,6 @@ import { LoadingComponent } from 'src/app/core/components/loading/loading.compon
   imports: [CommonModule, TasksRoutingModule, SharedModule],
   providers: [
     TaskWeekStore,
-    TaskDayListStore,
     TaskDefinitionListStore,
     TaskActivityListStore,
     TaskWeekListStore,

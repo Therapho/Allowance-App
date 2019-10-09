@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TaskDayListStore } from './task-day-list.store';
 import { TaskWeekStore } from './task-week.store';
 import { TaskActivityListStore } from './task-activity-list.store';
 import { TaskDefinitionListStore } from './task-definition-list.store';
 import { TaskWeek } from '../entities/task-week';
-import { TaskDay } from '../entities/task-day';
 import { TaskActivity } from '../entities/task-activity';
 import { TaskDefinition } from '../entities/task-definition';
 
@@ -18,7 +16,6 @@ export class TaskStore {
 
   constructor(
     private _taskWeekStore: TaskWeekStore,
-    private _taskDayListStore: TaskDayListStore,
     private _taskActivityListStore: TaskActivityListStore,
     private _taskDefinitionListStore: TaskDefinitionListStore,
 
@@ -30,9 +27,7 @@ export class TaskStore {
   get taskWeek(): TaskWeek {
     return this._taskWeekStore.state;
   }
-  get taskDayList(): TaskDay[] {
-    return this._taskDayListStore.state;
-  }
+
   get taskActivityList(): TaskActivity[] {
     return this._taskActivityListStore.state;
   }
@@ -50,12 +45,8 @@ export class TaskStore {
     return new Promise((resolve, reject) => {
       this._taskWeekStore.loadDataForTaskWeek(taskWeekId)
         .then(taskWeek => {
-          this._taskDayListStore.loadData(taskWeek)
-            .then(taskDayList => {
-              this._taskActivityListStore.loadDataWeek(taskWeek, taskDayList, this.taskDefinitionList)
-                .then(() => resolve());
-
-            });
+          this._taskActivityListStore.loadDataWeek(taskWeek, this.taskDefinitionList)
+            .then(() => resolve());
         });
     });
 
@@ -64,18 +55,14 @@ export class TaskStore {
     return new Promise((resolve, reject) => {
 
 
-        this.userIdentifier = userIdentifier;
-        this._selectedDate = selectedDate;
+      this.userIdentifier = userIdentifier;
+      this._selectedDate = selectedDate;
 
-        this._taskWeekStore.loadDataForDate(userIdentifier, selectedDate)
-          .then(taskWeek => {
-            this._taskDayListStore.loadData(taskWeek)
-              .then(taskDayList => {
-                this._taskActivityListStore.loadDataWeek(taskWeek, taskDayList, this.taskDefinitionList)
-                  .then(() => resolve());
-
-              });
-          });
+      this._taskWeekStore.loadDataForDate(userIdentifier, selectedDate)
+        .then(taskWeek => {
+          this._taskActivityListStore.loadDataWeek(taskWeek, this.taskDefinitionList)
+            .then(() => resolve());
+        });
     });
 
   }

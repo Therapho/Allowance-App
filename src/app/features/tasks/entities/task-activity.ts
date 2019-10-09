@@ -5,7 +5,13 @@ export class TaskActivity {
    taskDayId: number;
    sequence: number;
    taskWeekId: number;
-   statusId: number;
+   mondayStatusId: number;
+   tuesdayStatusId: number;
+   wednesdayStatusId: number;
+   thursdayStatusId: number;
+   fridayStatusId: number;
+   saturdayStatusId: number;
+   sundayStatusId: number;
    daySequence: number;
    taskDefinitionId: number;
    userIdentifier: string;
@@ -17,7 +23,13 @@ export class TaskActivity {
         taskDayId: +data.taskDayId,
         sequence: +data.sequence,
         taskWeekId: +data.taskWeekId,
-        statusId: +data.statusId,
+        mondayStatusId: +data.mondayStatusId,
+        tuesdayStatusId: +data.tuesdayStatusId,
+        wednesdayStatusId: +data.wednesdayStatusId,
+        thursdayStatusId: +data.thursdayStatusId,
+        fridayStatusId: +data.fridayStatusId,
+        saturdayStatusId: +data.saturdayStatusId,
+        sundayStatusId: +data.sundayStatusId,
         taskDefinitionId: +data.taskDefinitionId,
         daySequence: +data.daySequence,
         userIdentifier: data. userIdentifier

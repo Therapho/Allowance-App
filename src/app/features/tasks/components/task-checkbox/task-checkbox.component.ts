@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { TaskActivity } from '../../entities/task-activity';
 import { Constants } from 'src/app/core/common/constants';
+import { TaskActivityItem } from '../../entities/task-activity-item';
 
 
 @Component({
@@ -10,16 +11,16 @@ import { Constants } from 'src/app/core/common/constants';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCheckboxComponent implements OnInit {
-  @Input() taskActivity: TaskActivity = null;
+  @Input() taskActivityItem: TaskActivityItem = null;
+  @Input() day: string;
   @Input() canEdit: boolean;
-  @Output() statusChange: EventEmitter<TaskActivity> = new EventEmitter();
-  @Output() clear: EventEmitter<TaskActivity> = new EventEmitter();
+  @Output() statusChange: EventEmitter<TaskActivityItem> = new EventEmitter();
+  @Output() clear: EventEmitter<TaskActivityItem> = new EventEmitter();
   public status = '';
   constructor() { }
 
   ngOnInit() {
-
-    switch (this.taskActivity.statusId) {
+    switch (this.taskActivityItem.statusId) {
       case Constants.ActivityStatus.Blocked:
         this.status = 'Blocked';
         break;
@@ -31,9 +32,11 @@ export class TaskCheckboxComponent implements OnInit {
         break;
     }
   }
+
+
   onTap(event) {
     if (!this.canEdit) {return; }
-    let statusId = this.taskActivity.statusId;
+    let statusId = this.taskActivityItem.statusId;
 
     if (statusId === Constants.ActivityStatus.Incomplete || statusId === Constants.ActivityStatus.Blocked) {
       statusId = Constants.ActivityStatus.Complete;
@@ -43,21 +46,21 @@ export class TaskCheckboxComponent implements OnInit {
         this.status = 'Blocked';
       }
 
-    this.taskActivity.statusId = statusId;
-    this.statusChange.emit(this.taskActivity);
+    this.taskActivityItem.statusId = statusId;
+    this.statusChange.emit(this.taskActivityItem);
   }
   onPress(event) {
     if (!this.canEdit) {return; }
-    let statusId = this.taskActivity.statusId;
+    let statusId = this.taskActivityItem.statusId;
 
     if (statusId === Constants.ActivityStatus.Complete) {
-      this.clear.emit(this.taskActivity);
+      this.clear.emit(this.taskActivityItem);
     }
     if (statusId === Constants.ActivityStatus.Complete || statusId === Constants.ActivityStatus.Blocked) {
       statusId = Constants.ActivityStatus.Incomplete;
       this.status = 'Incomplete';
 
-      this.taskActivity.statusId = statusId;
+      this.taskActivityItem.statusId = statusId;
 
 
     }

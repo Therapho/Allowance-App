@@ -15,4 +15,7 @@ export class Constants {
   public static get MessageType() {
     return {None: 0, Information: 1, Warning: 2, Error: 3};
   }
+  public static get Day() {
+    return {Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 7};
+  }
 }
