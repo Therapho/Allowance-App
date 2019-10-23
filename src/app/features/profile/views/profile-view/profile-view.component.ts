@@ -47,14 +47,14 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
         this.accountStore.refreshAccountList().catch(error => {
           this.messageService.addError(
             'Error refreshing account list.',
-            error.message
+            error
           );
         });
       })
       .catch(error => {
         this.messageService.addError(
           'Error updating balance.',
-          error.message
+          error
         );
       });
   }

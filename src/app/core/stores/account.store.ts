@@ -29,12 +29,17 @@ export class AccountStore {
     return new Promise<Account>((resolve, reject) => {
       this.dataService.getAccountList()
       .then(accountList => {
-        this._accountListStore.setState(accountList);
-        const account = this.getAccount(userIdentifier);
-        this._currentAccountStore.setState(account);
-        resolve(account);
+        try {
+          this._accountListStore.setState(accountList);
+          const account = this.getAccount(userIdentifier);
+          this._currentAccountStore.setState(account);
+          resolve(account);
+        } catch (error) {
+          reject(new Error('Error setting the active account.' + error.message));
+        }
+
       })
-      .catch(error => reject(error));
+      .catch(error => reject(new Error('Error retrieving account list. ' + error)));
     });
 
   }
@@ -42,6 +47,9 @@ export class AccountStore {
     return this.dataService.getAccountList().then(accountList =>  this._accountListStore.setState(accountList));
   }
   public getAccount(userIdentifier: string): Account {
+    if (this.accountList == null) {
+      throw new Error('No account list loaded.');
+    }
     const account = this.accountList.find(a => a.userIdentifier === userIdentifier);
     return account;
   }

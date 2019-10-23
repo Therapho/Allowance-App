@@ -30,7 +30,7 @@ export class LogViewComponent implements OnInit {
       this.routeSubscription = this.route.paramMap.subscribe(params => {
         this.selectedAccountId = +params.get('accountid');
         this.transactionLogStore.load(this.selectedAccountId).catch(error => {
-          this.messageService.addError('Error retrieving transaction log data.', error.message);
+          this.messageService.addError('Error retrieving transaction log data.', error);
         });
     });
   }

@@ -18,42 +18,45 @@ export class AppComponent implements OnInit, OnDestroy {
     public accountStore: AccountStore,
     private authenticationService: AuthenticationService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loginSubscription = this.authenticationService.loginResponse$.subscribe(u => {
-      this.setupLogin(u);
+      this.setupSession(u);
     });
 
     const user = this.authenticationService.getUser();
-    if (user) {
-      this.setupLogin(user);
-    }
+    this.setupSession(user);
   }
   public onLogin() {
-     this.authenticationService.login();
+    this.authenticationService.login();
   }
   public onLogout() {
-    localStorage.clear();
     this.authenticationService.logout();
   }
 
-  private async setupLogin(user: User) {
-    if (user == null) {
-      this.userStore.setState(null);
-      this.authenticationService.logout();
-      return;
-    }
-    // tslint:disable-next-line: no-string-literal
-    const userIdentifier = user.idToken['sub'];
+  private async setupSession(user: User) {
     this.userStore.setState(user);
-    this.accountStore.load(userIdentifier)
-      .then()
-      .catch(error => {
-        this.messageService.addError('Error retrieving account for logged in user.', error.message);
-      });
+    let exp = null;
 
+    if (user != null) {
+      // tslint:disable-next-line: no-string-literal
+      exp = user.idToken['exp'];
+    }
+    if (exp == null || exp < Date.now().valueOf() / 1000) {
+      this.authenticationService.login();
+    } else {
+      // tslint:disable-next-line: no-string-literal
+      const userIdentifier = user.idToken['sub'];
+      this.accountStore.load(userIdentifier)
+        .then()
+        .catch(error => {
+
+          this.messageService.addError('Error retrieving account for logged in user with identifier ' + userIdentifier, error);
+        });
+    }
   }
+
   ngOnDestroy() {
     if (this.loginSubscription) {
       this.loginSubscription.unsubscribe();

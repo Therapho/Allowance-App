@@ -23,23 +23,33 @@ export class AuthenticationService {
     private router: Router
   ) {
 
-    this.agent = new UserAgentApplication(environment.clientId, environment.authority, null, {
+    this.agent = new UserAgentApplication(environment.clientId, environment.authority, this.authCallback, {
       validateAuthority: environment.validateAthority,
       cacheLocation: environment.cacheLocation,
-      protectedResourceMap: environment.protectedResourceMap
+      protectedResourceMap: environment.protectedResourceMap,
+      navigateToLoginRequestUrl: false
     });
+  }
+
+  authCallback(errorDesc, token, error, tokenType) {
+     localStorage.setItem('AccessToken', token);
+     this.getAccessToken().then(() => {
+          const user = this.agent.getUser();
+          this.loginResponse.next(user);
+     });
   }
 
   public login(): Observable<User> {
 
-    this.agent.loginPopup(environment.contentScopes).then(() => {
-      this.getAccessToken().then(() => {
-        const user = this.agent.getUser();
-        this.loginResponse.next(user);
-      });
-    }).catch(error => {
-      this.loginResponse.error(error);
-    });
+    this.agent.loginRedirect(environment.contentScopes);
+    // .then(() => {
+    //   this.getAccessToken().then(() => {
+    //     const user = this.agent.getUser();
+    //     this.loginResponse.next(user);
+    //   });
+    // }).catch(error => {
+    //   this.loginResponse.error(error);
+    // });
     return this.loginResponse.asObservable();
   }
 

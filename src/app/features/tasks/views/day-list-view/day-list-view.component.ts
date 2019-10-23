@@ -46,7 +46,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
       this.busy$.next(true);
       this.loadData(params.get('id'))
         .catch(error => {
-          this.messageService.addError('Error loading data for task list.', error.message);
+          this.messageService.addError('Error loading data for task list.', error);
         })
         .finally(() => this.busy$.next(false));
     });
@@ -90,7 +90,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
           this.router.navigate(['/profile']);
         });
       }).catch(error => {
-        this.messageService.addError('Error saving task list data.', error.message);
+        this.messageService.addError('Error saving task list data.', error);
       });
   }
   get canSave(): boolean {
@@ -117,7 +117,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
 
   }
   get canAccept(): boolean {
-    const endOfWeek = DateUtilities.addDays(this.taskStore.taskWeek.weekStartDate, 0);
+    const endOfWeek = DateUtilities.addDays(this.taskStore.taskWeek.weekStartDate, 6);
     const today = new Date();
     const canAccept = this.taskStore.taskWeek.statusId === Constants.Status.Open && this.accountStore.isParent && today >= endOfWeek;
 

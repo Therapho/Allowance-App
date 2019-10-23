@@ -26,7 +26,20 @@ export class MessageService {
     };
     this.addMessage(message);
   }
-  public addError(subject: string, body: string) {
+  public addError(subject: string, error: any) {
+    let body: string = null;
+    if (error.message) {
+      body += error.message;
+    }
+    if (error.stack) {
+      body += error.stack;
+    }
+    if (error.error) {
+      body += error.error;
+    }
+    if (!body) {
+      body = error;
+    }
     const message: Message = {
       subject, body, type: Constants.MessageType.Error
     };
