@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { User, UserAgentApplication } from 'msal';
+import { UserAgentApplication, Configuration, CacheLocation, AuthError, AuthResponse, Account } from 'msal';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -13,35 +13,51 @@ export class AuthenticationService {
 
   loginFailSub: Subscription;
   loginSuccessSub: Subscription;
-  private loginResponse = new Subject<User>();
+  private loginResponse = new Subject<Account>();
   private agent: UserAgentApplication;
   public loginResponse$ = this.loginResponse.asObservable();
   public data: string;
-  msalConfig: { auth: { clientId: string; authority: string; }; cache: { cacheLocation: string; storeAuthStateInCookie: boolean; }; };
+  
 
   constructor(
     private router: Router
   ) {
+    var msalConfig: Configuration = {
+      auth:{
+        clientId: environment.clientId,
+        authority: environment.authority,
+        validateAuthority: environment.validateAthority,
+        redirectUri: environment.redirectUri,
+        navigateToLoginRequestUrl: true
+      },
+      cache:{
+        cacheLocation: environment.cacheLocation as CacheLocation
 
-    this.agent = new UserAgentApplication(environment.clientId, environment.authority, this.authCallback, {
-      validateAuthority: environment.validateAthority,
-      cacheLocation: environment.cacheLocation,
-      protectedResourceMap: environment.protectedResourceMap,
-      navigateToLoginRequestUrl: false
-    });
+      },
+      system:{
+
+      },
+      framework:{
+        protectedResourceMap:  environment.protectedResourceMap
+        
+      }
+    }
+    this.agent = new UserAgentApplication(msalConfig);
   }
 
-  authCallback(errorDesc, token, error, tokenType) {
+  authCallback(authErr: AuthError, response?: AuthResponse) {
+    const token = response.idToken.rawIdToken;
      localStorage.setItem('AccessToken', token);
      this.getAccessToken().then(() => {
-          const user = this.agent.getUser();
-          this.loginResponse.next(user);
+          const account = this.agent.getAccount();
+          this.loginResponse.next(account);
      });
   }
 
-  public login(): Observable<User> {
-
-    this.agent.loginRedirect(environment.contentScopes);
+  public login(): Observable<Account> {
+    const loginRequest = { scopes: environment.contentScopes };
+    this.agent.handleRedirectCallback(this.authCallback);
+    this.agent.loginRedirect(loginRequest);
     // .then(() => {
     //   this.getAccessToken().then(() => {
     //     const user = this.agent.getUser();
@@ -58,26 +74,29 @@ export class AuthenticationService {
     this.router.navigate(['']);
   }
 
-  public getUser(): User {
-    let user = this.agent.getUser();
-    if (!this.isValid(user)) {
-      user = null;
+  public getAccount(): Account {
+    let account = this.agent.getAccount();
+    if (!this.isValid(account)) {
+      account = null;
     }
 
-    return user;
+    return account;
   }
 
-  isValid(user: User): boolean {
-    if (!user) { return false; }
+  isValid(account: Account): boolean {
+    if (!account) { return false; }
     // tslint:disable-next-line: no-string-literal
-    if (user.idToken['exp'] > Date.now()) { return false; }
+    //if (account.idToken['exp'] > Date.now()) { return false; }
     return true;
   }
   public getAccessToken(): Promise<string> {
+    const tokenRequest = { scopes: environment.contentScopes };
     return new Promise<string>((resolve, reject) => {
       this.agent
-      .acquireTokenSilent(environment.contentScopes)
-      .then(token => resolve(token))
+      .acquireTokenSilent(tokenRequest)
+      .then(response => {
+        const token = response.accessToken;
+        resolve(token);})
       .catch(reason => {
         this.loginResponse.next(null);
         reject(reason);

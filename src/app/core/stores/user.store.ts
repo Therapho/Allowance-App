@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { User } from 'msal';
 import { Store } from '../types/store';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { Account } from 'msal';
 
 @Injectable()
-export class UserStore extends Store<User> {
+export class UserStore extends Store<Account> {
   private _loggedIn$ = new BehaviorSubject<boolean>(false);
   private loggedInSubscription: Subscription;
 

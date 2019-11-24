@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserStore } from './core/stores/user.store';
 import { AccountStore } from './core/stores/account.store';
-import { User } from 'msal';
+import { Account } from 'msal';
 import { AuthenticationService } from './core/services/authentication-service/authentication.service';
 import { MessageService } from './core/services/message-service/message.service';
 
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.setupSession(u);
     });
 
-    const user = this.authenticationService.getUser();
+    const user = this.authenticationService.getAccount();
     this.setupSession(user);
   }
   public onLogin() {
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authenticationService.logout();
   }
 
-  private async setupSession(user: User) {
+  private async setupSession(user: Account) {
     this.userStore.setState(user);
     let exp = null;
 
