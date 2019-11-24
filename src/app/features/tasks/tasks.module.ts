@@ -14,7 +14,6 @@ import { TaskCheckboxComponent } from './components/task-checkbox/task-checkbox.
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskWeekListViewComponent } from './views/task-week-list-view/task-week-list-view.component';
 import { TaskWeekListStore } from './stores/task-week-list.store';
-import { LoadingComponent } from 'src/app/core/components/loading/loading.component';
 import { TaskActivityItemPipe } from './pipes/task-activity-item.pipe';
 import { TaskDefinitionFilterPipe } from './pipes/task-definition-filter.pipe';
 
@@ -27,8 +26,7 @@ import { TaskDefinitionFilterPipe } from './pipes/task-definition-filter.pipe';
     DayListViewComponent,
     TaskCheckboxComponent,
     TaskListComponent,
-    TaskWeekListViewComponent,
-    LoadingComponent
+    TaskWeekListViewComponent
   ],
   imports: [CommonModule, TasksRoutingModule, SharedModule],
   providers: [

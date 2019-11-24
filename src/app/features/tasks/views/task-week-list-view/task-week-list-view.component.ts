@@ -31,13 +31,9 @@ export class TaskWeekListViewComponent implements OnInit {
 
     this.selectedDate = DateUtilities.getMonday(new Date());
 
-    this.busy.setState(true);
     this.taskWeekListStore.loadData(this.selectedDate, DateUtilities.addDays(this.selectedDate, 30 ))
     .catch(error => {
       this.messageService.addError('Error loading data for task week list.', error);
-    })
-    .finally(() => {
-      this.busy.setState(false);
     });
   }
 

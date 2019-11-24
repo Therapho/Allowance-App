@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Store } from '../../types/store';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BusyService extends Store<boolean> {
+export class BusyService {
 constructor() {
-  super(false);
 }
-
+isLoading = new Subject<boolean>();
+show() {
+    this.isLoading.next(true);
+}
+hide() {
+    this.isLoading.next(false);
+}
 
 }

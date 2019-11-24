@@ -23,7 +23,9 @@ import {
   HAMMER_GESTURE_CONFIG
 } from '@angular/platform-browser';
 import * as Hammer from 'hammerjs';
-import { LoadingComponent } from './core/components/loading/loading.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { MatProgressSpinnerModule } from '@angular/material';
+import { LoaderInterceptorService } from './core/services/loader-interceptor-service/loader-interceptor-service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -38,13 +40,14 @@ export class MyHammerConfig extends HammerGestureConfig {
 }
 
 @NgModule({
-  declarations: [AppComponent, NavigationComponent, HomeComponent, MessageComponent, MessageDialogComponent],
+  declarations: [AppComponent, NavigationComponent, HomeComponent, MessageComponent, MessageDialogComponent, LoadingComponent],
   imports: [
     CoreModule,
     SharedModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    MatProgressSpinnerModule,
     HttpClientModule
   ],
   entryComponents: [MessageDialogComponent],
@@ -55,7 +58,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     BusyService,
     MessageService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true},
-    { provide: HAMMER_GESTURE_CONFIG,      useClass: MyHammerConfig  }
+    { provide: HAMMER_GESTURE_CONFIG,      useClass: MyHammerConfig  },
+    BusyService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true }
+
   ],
   bootstrap: [AppComponent]
 })
