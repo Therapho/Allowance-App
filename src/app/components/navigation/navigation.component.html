@@ -4,11 +4,18 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list  *ngIf="userStore.loggedIn$ | async">
+    <div *ngIf="userStore.loggedIn$ | async">
+      <mat-nav-list>
         <a mat-list-item [routerLink]='["/profile"]' routerLinkActive="router-link-active"><mat-icon>perm_identity</mat-icon> Profile</a>
         <a mat-list-item [routerLink]='["/tasks"]' routerLinkActive="router-link-active"><mat-icon>done</mat-icon> Tasks</a>
-    </mat-nav-list>
-    <mat-divider  *ngIf="userStore.loggedIn$ | async"></mat-divider>
+      </mat-nav-list>
+      <mat-divider  *ngIf="userStore.loggedIn$ | async"></mat-divider>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]='["/admin"]' routerLinkActive="router-link-active"><mat-icon>build</mat-icon> Admin</a>
+      </mat-nav-list>
+      <mat-divider  *ngIf="userStore.loggedIn$ | async"></mat-divider>
+    </div>
+
     <mat-nav-list>
       <a mat-list-item *ngIf="!(userStore.loggedIn$ | async)"   (click)="onLogin()"><mat-icon>lock</mat-icon> Login</a>
       <a mat-list-item *ngIf="userStore.loggedIn$ | async" (click)="onLogout()"><mat-icon>lock_open</mat-icon> Logout</a>

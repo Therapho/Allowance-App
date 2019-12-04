@@ -28,7 +28,11 @@ const routes: Routes = [
     path: 'tasks',
     loadChildren: () =>
       import('./features/tasks/tasks.module').then(mod => mod.TasksModule)
-  }
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+    import('./features/admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({
