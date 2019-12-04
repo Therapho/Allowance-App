@@ -13,7 +13,7 @@ export const environment = {
     'https://allowance.b2clogin.com/allowance.onmicrosoft.com/B2C_1_SignUpSignIn',
   dataApiUrl,
   appPath: 'https://allowance.rocchetti.ca/',
-  redirectUri: 'https://login.microsoftonline.com/tfp/oauth2/nativeclient',
+  redirectUri: 'https://allowance.rocchetti.ca/',
   appTitle: 'Allowance',
   clientId: '45ef1ae1-c126-4314-b819-c6adb6c0fb42',
   cacheLocation: 'localStorage',
@@ -21,6 +21,7 @@ export const environment = {
   apiScope,
   contentScopes: [apiScope],
   protectedResourceMap: new Map( [[dataApiUrl, [apiScope]]]),
-  secureApi:  true
+  secureApi:  true,
+  storeAuthStateInCookie: true
 };
 

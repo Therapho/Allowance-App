@@ -24,39 +24,47 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loginSubscription = this.authenticationService.loginResponse$.subscribe(u => {
       this.setupSession(u);
     });
+    this.authenticationService.getAccessToken().then((token) => {
+      if (token != null) {
+        const user = this.authenticationService.getAccount();
+        this.setupSession(user);
+      }
+    });
 
-    const user = this.authenticationService.getAccount();
-    this.setupSession(user);
   }
   public onLogin() {
     this.authenticationService.login();
   }
   public onLogout() {
-    this.authenticationService.logout();
+    this.logout();
   }
 
   private async setupSession(user: Account) {
-    this.userStore.setState(user);
-    let exp = null;
 
-    if (user != null) {
+    // let exp = null;
+
+    // if (user != null) {
+    //   // tslint:disable-next-line: no-string-literal
+    //   exp = user.idToken['exp'];
+    // }
+    // if (exp == null || exp < Date.now().valueOf() / 1000) {
+    //   this.userStore.setState(null);
+    // } else {
       // tslint:disable-next-line: no-string-literal
-      exp = user.idToken['exp'];
-    }
-    if (exp == null || exp < Date.now().valueOf() / 1000) {
-      this.authenticationService.login();
-    } else {
-      // tslint:disable-next-line: no-string-literal
-      const userIdentifier = user.idToken['sub'];
+      this.userStore.setState(user);
+      const userIdentifier = user.idToken.sub;
       this.accountStore.load(userIdentifier)
         .then()
         .catch(error => {
 
           this.messageService.addError('Error retrieving account for logged in user with identifier ' + userIdentifier, error);
         });
-    }
+    // }
   }
+  private logout() {
 
+    this.authenticationService.logout();
+  }
   ngOnDestroy() {
     if (this.loginSubscription) {
       this.loginSubscription.unsubscribe();

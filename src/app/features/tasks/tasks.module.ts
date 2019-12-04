@@ -5,7 +5,7 @@ import { TasksRoutingModule } from './tasks-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { TaskCardComponent } from './components/task-card/task-card.component';
 import { TaskGroupFilterPipe } from './pipes/task-group-filter.pipe';
-import { DayListViewComponent } from './views/day-list-view/day-list-view.component';
+import { DayListViewComponent } from './views/task-list-view/task-list-view.component';
 import { TaskWeekStore } from './stores/task-week.store';
 import { TaskDefinitionListStore } from './stores/task-definition-list.store';
 import { TaskActivityListStore } from './stores/task-activity-list.store';

@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { UserAgentApplication, Configuration, CacheLocation, AuthError, AuthResponse, Account } from 'msal';
+import { UserAgentApplication, CacheLocation, Configuration, AuthError, AuthResponse, Account} from 'msal';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -17,46 +17,41 @@ export class AuthenticationService {
   private agent: UserAgentApplication;
   public loginResponse$ = this.loginResponse.asObservable();
   public data: string;
-  
+
 
   constructor(
     private router: Router
   ) {
-    var msalConfig: Configuration = {
-      auth:{
+    const msalConfig: Configuration = {
+      auth: {
         clientId: environment.clientId,
         authority: environment.authority,
         validateAuthority: environment.validateAthority,
         redirectUri: environment.redirectUri,
         navigateToLoginRequestUrl: true
       },
-      cache:{
-        cacheLocation: environment.cacheLocation as CacheLocation
+      cache: {
+        cacheLocation: environment.cacheLocation as CacheLocation,
+        storeAuthStateInCookie: environment.storeAuthStateInCookie
 
       },
-      system:{
+      system: {
 
       },
-      framework:{
+      framework: {
         protectedResourceMap:  environment.protectedResourceMap
-        
+
       }
-    }
+    };
     this.agent = new UserAgentApplication(msalConfig);
+    this.agent.handleRedirectCallback((error, response) => {});
+
   }
 
-  authCallback(authErr: AuthError, response?: AuthResponse) {
-    const token = response.idToken.rawIdToken;
-     localStorage.setItem('AccessToken', token);
-     this.getAccessToken().then(() => {
-          const account = this.agent.getAccount();
-          this.loginResponse.next(account);
-     });
-  }
 
   public login(): Observable<Account> {
     const loginRequest = { scopes: environment.contentScopes };
-    this.agent.handleRedirectCallback(this.authCallback);
+
     this.agent.loginRedirect(loginRequest);
     // .then(() => {
     //   this.getAccessToken().then(() => {
@@ -71,24 +66,19 @@ export class AuthenticationService {
 
   public logout() {
     this.agent.logout();
-    this.router.navigate(['']);
+    // this.router.navigate(['']);
   }
 
   public getAccount(): Account {
-    let account = this.agent.getAccount();
-    if (!this.isValid(account)) {
-      account = null;
-    }
+    const account = this.agent.getAccount();
+    // if (!this.isValid(account)) {
+    //   account = null;
+    // }
 
     return account;
   }
 
-  isValid(account: Account): boolean {
-    if (!account) { return false; }
-    // tslint:disable-next-line: no-string-literal
-    //if (account.idToken['exp'] > Date.now()) { return false; }
-    return true;
-  }
+
   public getAccessToken(): Promise<string> {
     const tokenRequest = { scopes: environment.contentScopes };
     return new Promise<string>((resolve, reject) => {
@@ -96,7 +86,7 @@ export class AuthenticationService {
       .acquireTokenSilent(tokenRequest)
       .then(response => {
         const token = response.accessToken;
-        resolve(token);})
+        resolve(token); })
       .catch(reason => {
         this.loginResponse.next(null);
         reject(reason);

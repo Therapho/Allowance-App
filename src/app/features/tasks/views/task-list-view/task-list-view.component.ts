@@ -4,8 +4,6 @@ import { DateUtilities } from 'src/app/core/utilities/dateUtilities';
 import { TaskStore } from '../../stores/task.store';
 import { LookupStore } from 'src/app/core/stores/lookup.store';
 
-import { TaskActivityMatrix } from '../../entities/task-activity-matrix';
-import { TaskActivityItem } from '../../entities/task-activity-item';
 import { Constants } from 'src/app/core/common/constants';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
@@ -16,8 +14,8 @@ import { MessageService } from 'src/app/core/services/message-service/message.se
 
 @Component({
   selector: 'app-day-list-view',
-  templateUrl: './day-list-view.component.html',
-  styleUrls: ['./day-list-view.component.scss']
+  templateUrl: './task-list-view.component.html',
+  styleUrls: ['./task-list-view.component.scss']
 })
 export class DayListViewComponent implements OnInit, OnDestroy {
 
@@ -100,7 +98,7 @@ export class DayListViewComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profile']);
   }
   accept() {
-    this.confirm('This will finalize this week\'s tasks, and allowance, locking this list.  Are you sure?')
+    this.confirm('This will ACCEPT this week\'s tasks, and allowance, locking this list.  Are you sure?')
       .then(response => {
         if (response === true) {
           this.busy$.next(true);
@@ -110,6 +108,23 @@ export class DayListViewComponent implements OnInit, OnDestroy {
               this.busy$.next(false);
               this.router.navigate(['/profile']);
             })
+          );
+        }
+      });
+
+
+  }
+  reject() {
+    this.confirm('This will REJECT this week\'s tasks, and allowance, locking this list.  Are you sure?')
+      .then(response => {
+        if (response === true) {
+          this.busy$.next(true);
+          this.taskStore.taskWeek.statusId = Constants.Status.Rejected;
+          this.taskStore.saveTaskActivityList().then(() => {}
+            // this.taskStore.acceptTaskWeek().then(() => {
+            //   this.busy$.next(false);
+            //   this.router.navigate(['/profile']);
+            // })
           );
         }
       });

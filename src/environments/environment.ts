@@ -24,5 +24,6 @@ export const environment = {
   apiScope,
   contentScopes: [apiScope],
   protectedResourceMap: new Map( [[dataApiUrl, [apiScope]]]),
-  secureApi:  false
+  secureApi:  false,
+  storeAuthStateInCookie: true
 };
